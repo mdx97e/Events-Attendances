@@ -21,4 +21,3 @@ build for production and view the bundle analyzer report
 ![Screenshot](/src/assets/7.JPG)
 ![Screenshot](/src/assets/8.JPG)
 ![Screenshot](/src/assets/9.JPG)
-![Screenshot](/src/assets/9.JPG)
