@@ -83,6 +83,7 @@
     },
     methods: {
       createMeetup () {
+        // blabla
         firebase.database().ref('/events/')
           .push({
             titlu: this.title,
