@@ -1,3 +1,3 @@
 # Events-Attendances
 
-<img :src="require('../assets/1.JPG')"/>
+![Screenshot](/src/assets/1.JPG)
