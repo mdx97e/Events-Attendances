@@ -1,23 +1,24 @@
-# Events-Attendances
-App for keeping track of user attendances at the meetings registered in the database.
+# events-attendances
 
-install dependencies
+## Project setup
+```
 npm install
+```
 
-serve with hot reload at localhost:8080
-npm run dev
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
 
-build for production with minification
+### Compiles and minifies for production
+```
 npm run build
+```
 
-build for production and view the bundle analyzer report
+### Lints and fixes files
+```
+npm run lint
+```
 
-![Screenshot](/src/assets/1.JPG)
-![Screenshot](/src/assets/2.JPG)
-![Screenshot](/src/assets/3.JPG)
-![Screenshot](/src/assets/4.JPG)
-![Screenshot](/src/assets/5.JPG)
-![Screenshot](/src/assets/6.JPG)
-![Screenshot](/src/assets/7.JPG)
-![Screenshot](/src/assets/8.JPG)
-![Screenshot](/src/assets/9.JPG)
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).

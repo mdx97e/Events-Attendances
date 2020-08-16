@@ -17,16 +17,16 @@
             <v-card-text>
               <v-card>
                 <v-list>
-                  <v-list-tile v-for="(item, index) in topMeetings" :key="index">
-                    <v-list-tile-action>
+                  <v-list-item v-for="(item, index) in topMeetings" :key="index">
+                    <v-list-item-action>
                       <v-icon v-if="index === 0" color="primary">star</v-icon>
-                    </v-list-tile-action>
-                    <v-list-tile-content>
+                    </v-list-item-action>
+                    <v-list-item-content>
                       <router-link :to="{ name: 'Events', params: { id: ev.indexOf(topMeetings[index]) }}" tag="li" style="cursor:pointer">
-                        <v-list-tile-title v-text="item"></v-list-tile-title>
+                        <v-list-item-title v-text="item"></v-list-item-title>
                       </router-link>
-                    </v-list-tile-content>
-                  </v-list-tile>
+                    </v-list-item-content>
+                  </v-list-item>
                 </v-list>
               </v-card>
             </v-card-text>
@@ -39,30 +39,30 @@
             <h3>All meetings</h3>
             <v-card-text>
               <v-list>
-                <v-list-tile avatar v-for="(event,index) in events" :key="index">
+                <v-list-item avatar v-for="(event,index) in events" :key="index">
                   <router-link :to="{ name: 'Events', params: { id: index }}" tag="li" style="cursor:pointer">
-                  <v-list-tile-avatar>
+                  <v-list-item-avatar>
                     <img :src="event.avatar">
-                  </v-list-tile-avatar>
+                  </v-list-item-avatar>
                   </router-link>
-                  <v-list-tile-content>
+                  <v-list-item-content>
                     <router-link :to="{ name: 'Events', params: { id: index }}" tag="li" style="cursor:pointer">
-                    <v-list-tile-title>
+                    <v-list-item-title>
                       {{event.titlu}}
-                    </v-list-tile-title>
-                    <v-list-tile-sub-title v-html="event.descriere">
-                    </v-list-tile-sub-title>
+                    </v-list-item-title>
+                    <v-list-item-sub-title v-html="event.descriere">
+                    </v-list-item-sub-title>
                     </router-link>
-                  </v-list-tile-content>
-                  <v-list-tile-action>
-                    <v-list-tile-action-text>
+                  </v-list-item-content>
+                  <v-list-item-action>
+                    <v-list-item-action-text>
                       {{event.data | filtru}}
-                    </v-list-tile-action-text>
+                    </v-list-item-action-text>
                   <v-icon @click="deleteEvent(index)" style="cursor:pointer">
                     delete
                   </v-icon>
-                  </v-list-tile-action>
-                </v-list-tile>
+                  </v-list-item-action>
+                </v-list-item>
               </v-list>
             </v-card-text>
           </v-card>

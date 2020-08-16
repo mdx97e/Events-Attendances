@@ -4,56 +4,56 @@
       <v-layout column align-center>
         <v-list two-line>
           <v-menu offset-y>
-            <v-btn flat color="primary" dark slot="activator">
+            <v-btn color="primary" dark slot="activator">
               Month
             </v-btn>
             <v-list>
-              <v-list-tile @click="filter.luna = null">  
-                <v-list-tile-title>
+              <v-list-item @click="filter.luna = null">  
+                <v-list-item-title>
                  All months
                  <template v-if="filter.luna === null">
                   &#10004;
                  </template>
-                </v-list-tile-title>
-              </v-list-tile>
+                </v-list-item-title>
+              </v-list-item>
             </v-list>
             <v-list>
-              <v-list-tile v-for="(month, index) in months" :key="index" @click="filter.luna = index">
-                <v-list-tile-title> 
+              <v-list-item v-for="(month, index) in months" :key="index" @click="filter.luna = index">
+                <v-list-item-title> 
                   {{month.nume}} 
                   <template v-if="index === filter.luna">
                    &#10004;
                   </template>
-                </v-list-tile-title>
-              </v-list-tile>
+                </v-list-item-title>
+              </v-list-item>
             </v-list>
           </v-menu>
           <v-menu offset-y>
-            <v-btn flat  color="primary" dark slot="activator">
+            <v-btn  color="primary" dark slot="activator">
               Year
             </v-btn>
             <v-list>
-              <v-list-tile @click="filter.an = null">  
-                <v-list-tile-title>
+              <v-list-item @click="filter.an = null">  
+                <v-list-item-title>
                  All years
                  <template v-if="filter.an === null">
                   &#10004;
                  </template>
-                </v-list-tile-title>
-               </v-list-tile>
+                </v-list-item-title>
+               </v-list-item>
             </v-list>
             <v-list>
-              <v-list-tile v-for="an in ani" :key="an" @click="filter.an = an">
-                <v-list-tile-title> 
+              <v-list-item v-for="an in ani" :key="an" @click="filter.an = an">
+                <v-list-item-title> 
                   {{an}}
                   <template v-if="an === filter.an">
                     &#10004;
                   </template>
-                </v-list-tile-title>
-              </v-list-tile>
+                </v-list-item-title>
+              </v-list-item>
             </v-list>
           </v-menu> 
-          <v-btn flat color="primary" @click = "filter.luna = null, filter.an = null, date = null, date1 = null">
+          <v-btn color="primary" @click = "filter.luna = null, filter.an = null, date = null, date1 = null">
               Reset
           </v-btn>
           <v-flex xs12> 
@@ -106,33 +106,33 @@
               </v-date-picker>
             </v-menu>
           </v-flex>
-          <v-list-tile avatar v-for="(event,index) in filterEvents" :key="index">
+          <v-list-item avatar v-for="(event,index) in filterEvents" :key="index">
             <router-link :to="{ name: 'Events', params: { id: index }}" tag="li" style="cursor:pointer">
-            <v-list-tile-avatar>
+            <v-list-item-avatar>
               <img :src="event.avatar">
-            </v-list-tile-avatar>
+            </v-list-item-avatar>
             </router-link>
-            <v-list-tile-content>
+            <v-list-item-content>
               <router-link :to="{ name: 'Events', params: { id: index }}" tag="li" style="cursor:pointer">
-              <v-list-tile-title>
+              <v-list-item-title>
                 {{event.titlu}}
-              </v-list-tile-title>
-              <v-list-tile-sub-title v-html="event.descriere">
-              </v-list-tile-sub-title>
+              </v-list-item-title>
+              <v-list-item-sub-title v-html="event.descriere">
+              </v-list-item-sub-title>
               </router-link>
-            </v-list-tile-content>
-            <v-list-tile-action>
+            </v-list-item-content>
+            <v-list-item-action>
               <v-btn color="primary" @click="addGoing(index)" v-if="areyougoing.indexOf(index) === -1">
                 Attend
               </v-btn>
               <v-btn disabled v-else>
                 Going
               </v-btn>
-              <v-list-tile-action-text>
+              <v-list-item-action-text>
                 {{event.data | filtru}}
-              </v-list-tile-action-text>
-            </v-list-tile-action>
-          </v-list-tile>
+              </v-list-item-action-text>
+            </v-list-item-action>
+          </v-list-item>
         </v-list>
         <div id="map"></div>
       </v-layout>

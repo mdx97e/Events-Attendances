@@ -8,7 +8,6 @@
       v-model="drawer"
       enable-resize-watcher
       fixed
-      app
       temporary
     >
       <div id="text" v-if="admin === false">
@@ -29,76 +28,73 @@
         </v-flex>
       </div>
       <v-flex xs12>
-      <v-list-tile router to = "/">
-        <v-list-tile-action>
+      <v-list-item router to = "/">
+        <v-list-item-action>
           <v-icon>home</v-icon>
-        </v-list-tile-action>
-        <v-list-tile-title>Home</v-list-tile-title>
-      </v-list-tile>
+        </v-list-item-action>
+        <v-list-item-title>Home</v-list-item-title>
+      </v-list-item>
       </v-flex>
       <v-flex xs12>
-      <v-list-tile router to = "/profile">
-        <v-list-tile-action>
+      <v-list-item router to = "/profile">
+        <v-list-item-action>
           <v-icon>account_circle</v-icon>
-        </v-list-tile-action>
-        <v-list-tile-title>Account info</v-list-tile-title>
-      </v-list-tile>
+        </v-list-item-action>
+        <v-list-item-title>Account info</v-list-item-title>
+      </v-list-item>
       </v-flex>
       <v-flex xs12>
-        <v-list-tile router to = "/createMeetup" v-if="admin === true">
-          <v-list-tile-action>
+        <v-list-item router to = "/createMeetup" v-if="admin === true">
+          <v-list-item-action>
             <v-icon>card_travel</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-title>Create meetup</v-list-tile-title>
-        </v-list-tile>
+          </v-list-item-action>
+          <v-list-item-title>Create meetup</v-list-item-title>
+        </v-list-item>
       </v-flex>
       <v-flex xs12>
-      <v-list-tile router to = "/statistics" v-if="admin === true">
-        <v-list-tile-action>
+      <v-list-item router to = "/statistics" v-if="admin === true">
+        <v-list-item-action>
           <v-icon>settings</v-icon>
-        </v-list-tile-action>
-        <v-list-tile-title>Statistics</v-list-tile-title>
-      </v-list-tile>
+        </v-list-item-action>
+        <v-list-item-title>Statistics</v-list-item-title>
+      </v-list-item>
       </v-flex>
       <v-flex xs12>
-      <v-list-tile  @click="onSignOut">
-        <v-list-tile-action>
+      <v-list-item  @click="onSignOut">
+        <v-list-item-action>
           <v-icon>clear</v-icon>
-        </v-list-tile-action>
-        <v-list-tile-title>Sign Out</v-list-tile-title>
-      </v-list-tile>
+        </v-list-item-action>
+        <v-list-item-title>Sign Out</v-list-item-title>
+      </v-list-item>
       </v-flex>
       <v-list>
-        <v-list-tile
+        <v-list-item
           value="true"
           v-for="(item, i) in items"
           :key="i"
-          v-if="onLoad"
         >
-          <v-list-tile-action>
+          <v-list-item-action>
             <v-icon v-html="item.icon"></v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title v-text="item.title"></v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title v-text="item.title"></v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-toolbar
-      app
-      :clipped-left="clipped"
       dark color="primary"
     >
-      <v-toolbar-side-icon v-show="userIsAuthenticated" @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <div v-show="userIsAuthenticated" @click.stop="drawer = !drawer"></div>
       <v-toolbar-title class="white--text">Meeting App</v-toolbar-title>
       <v-spacer></v-spacer>
     </v-toolbar>
-    <v-content>
+    <v-main>
       <router-view/>
-    </v-content>
+    </v-main>
     <v-footer height="auto" class="primary">
     <v-layout row wrap justify-center>
-      <v-btn flat class="white--text" @click="aboutUs = true"> About us </v-btn>
+      <v-btn class="white--text" @click="aboutUs = true"> About us </v-btn>
       <v-dialog v-model="aboutUs" max-width="600">
         <v-card>
           <v-card-title>
@@ -106,7 +102,7 @@
           </v-card-title>
         </v-card>
       </v-dialog>
-      <v-btn flat class="white--text" @click="terms = true" > Terms and conditions </v-btn>
+      <v-btn class="white--text" @click="terms = true" > Terms and conditions </v-btn>
       <v-dialog v-model="terms" max-width="600">
         <v-card>
           <v-card-title>
@@ -114,7 +110,7 @@
           </v-card-title>
         </v-card>
       </v-dialog>
-      <v-btn flat class="white--text" @click="contact = true"> Contact </v-btn>
+      <v-btn class="white--text" @click="contact = true"> Contact </v-btn>
       <v-dialog v-model="contact" max-width="600">
         <v-card>
          <form>
@@ -143,7 +139,7 @@
                 class="primary"
                 type="submit"
                 route to='/'>Send message</v-btn>
-              <v-btn flat color="primary" router to = "/" @click="contact = false">Back</v-btn>
+              <v-btn color="primary" router to = "/" @click="contact = false">Back</v-btn>
             </v-flex>
           </v-layout>
         </form>
@@ -212,13 +208,6 @@ export default {
       if (this.value < 60) return 'green'
       if (this.value < 80) return 'blue'
       return 'yellow'
-    },
-    onLoad () {
-      if (this.userIsAuthenticated) {
-        this.$router.push('/')
-      } else {
-        this.$router.push('/login')
-      }
     },
     userIsAuthenticated () {
       return this.$store.getters.user !== null && this.$store.getters.user !== undefined

@@ -24,37 +24,37 @@
             </v-card>
           </v-flex>
           <v-btn color="primary" @click="participanti = true">Who's going</v-btn>
-        <v-list-tile v-for="(comment,index) in comments" :key="index">
-          <v-list-tile-title>
+        <v-list-item v-for="(comment,index) in comments" :key="index">
+          <v-list-item-title>
             {{comment}}
-          </v-list-tile-title>
-           <v-list-tile-action v-if="admin === true">
+          </v-list-item-title>
+           <v-list-item-action v-if="admin === true">
             <v-icon @click="deleteComment(index)" style="cursor:pointer">
               delete
             </v-icon>
-          </v-list-tile-action>
-         </v-list-tile>
+          </v-list-item-action>
+         </v-list-item>
         <v-btn color="primary" @click="comment()">Add a comment</v-btn>
         <v-flex xs8 id="input">
           <v-text-field label="Add a comment" textarea id="textInput">
           </v-text-field>
         </v-flex>
         <v-card-actions>
-          <v-btn flat color="primary" @click="cancelComment()"  v-if="commentAdd === true">Cancel</v-btn>
+          <v-btn color="primary" @click="cancelComment()"  v-if="commentAdd === true">Cancel</v-btn>
           <v-spacer></v-spacer>
-          <v-btn flat color="primary" v-if="commentAdd === true" @click="postComment()">Post</v-btn>
+          <v-btn color="primary" v-if="commentAdd === true" @click="postComment()">Post</v-btn>
         </v-card-actions>
         <v-card-actions>
-          <v-btn flat color="primary" router to = "/">Back</v-btn>
+          <v-btn color="primary" router to = "/">Back</v-btn>
         </v-card-actions>
       </v-card>
        <v-dialog v-model="participanti" max-width="480">
         <v-card>
-          <v-list-tile v-for="(user, index) in usersGoing" :key="index">
-            <v-list-tile-title>
+          <v-list-item v-for="(user, index) in usersGoing" :key="index">
+            <v-list-item-title>
               {{user}}
-            </v-list-tile-title>
-          </v-list-tile>
+            </v-list-item-title>
+          </v-list-item>
         </v-card>
       </v-dialog>
     </v-flex>

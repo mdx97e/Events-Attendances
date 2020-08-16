@@ -61,7 +61,7 @@
                 class="primary"
                 type="submit"
                 @click="createMeetup" route to='/'>Create Meetup</v-btn>
-              <v-btn flat color="primary" router to = "/">Back</v-btn>
+              <v-btn color="primary" router to = "/">Back</v-btn>
             </v-flex>
           </v-layout>
         </form>

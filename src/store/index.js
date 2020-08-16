@@ -54,10 +54,10 @@ export default new Vuex.Store({
     uploadPicture (state, payload) {
       state.uploadPicture.push(payload)
     },
-    emptyEvents: (state, payload) => {
+    emptyEvents: (state) => {
       state.events = []
     },
-    emptyGoing: (state, payload) => {
+    emptyGoing: (state) => {
       state.eventsGoing = []
     },
     getAdmin: (state, payload) => {
@@ -65,7 +65,7 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    readEvents ({commit}, payload) {
+    readEvents ({commit}) {
       return firebase.database().ref('events')
         .on('value', snap => {
           commit('emptyEvents')
@@ -88,9 +88,11 @@ export default new Vuex.Store({
         })
     },
     deleteEvent ({state}, payload) {
+      console.og(state);
       firebase.database().ref('/events/' + this.state.keysEvents[payload]).remove()
     },
     deleteComment ({state}, payload) {
+      console.og(state);
       var comments = []
       firebase.database().ref('/events/' + this.state.keysEvents[payload.idevent] + '/comments/')
         .on('value', snap => {
@@ -104,7 +106,7 @@ export default new Vuex.Store({
         })
       firebase.database().ref('/events/' + this.state.keysEvents[payload.idevent] + '/comments/' + comments[payload.index]).remove()
     },
-    getUserData ({commit}, payload) {
+    getUserData ({commit}) {
       return firebase.database().ref('users')
         .on('value', snap => {
           const myObj = snap.val()
@@ -193,7 +195,7 @@ export default new Vuex.Store({
           console.log(error)
         })
     },
-    getLocation ({commit}, payload) {
+    getLocation ({commit}) {
       return navigator.geolocation.getCurrentPosition(pos => {
         commit('getLocation', {
           lat: pos.coords.latitude,
@@ -221,6 +223,7 @@ export default new Vuex.Store({
         })
     },
     Going ({commit}, payload) {
+      console.log(commit);
       const user = this.state.user.uid
       return firebase.database().ref('/users/' + user + '/participari/' + this.state.keysEvents[payload])
         .set({
@@ -228,6 +231,7 @@ export default new Vuex.Store({
         })
     },
     setPrezenti ({state}, payload) {
+      console.log(state)
       return firebase.database().ref('/events/' + this.state.keysEvents[payload])
         .update({
           prezenti: +this.state.events[payload].prezenti + 1
