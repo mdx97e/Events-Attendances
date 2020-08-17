@@ -5,7 +5,6 @@ import Events from '@/components/Events'
 import Login from '@/components/Login'
 import SignUp from '@/components/SignUp'
 import Profile from '@/components/Profile'
-import Statistics from '@/components/Statistics'
 import createMeetup from '@/components/createMeetup'
 import AuthGuard from './authGuard'
 
@@ -28,11 +27,6 @@ export default new Router({
       name: 'Events',
       component: Events,
       beforeEnter: AuthGuard
-    },
-    {
-      path: '/statistics',
-      name: 'Statistics',
-      component: Statistics
     },
     {
       path: '/profile',
