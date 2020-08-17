@@ -24,27 +24,27 @@
           </v-progress-circular>
         </v-flex>
         <v-flex xs12>
-          {{totalParticipari}} events out of {{totalEvents}}
+          {{ totalParticipari }} events out of {{ totalEvents }}
         </v-flex>
       </div>
       <v-flex xs12>
-      <v-list-item router to = "/">
-        <v-list-item-action>
-          <v-icon>home</v-icon>
-        </v-list-item-action>
-        <v-list-item-title>Home</v-list-item-title>
-      </v-list-item>
+        <v-list-item router to="/">
+          <v-list-item-action>
+            <v-icon>home</v-icon>
+          </v-list-item-action>
+          <v-list-item-title>Home</v-list-item-title>
+        </v-list-item>
       </v-flex>
       <v-flex xs12>
-      <v-list-item router to = "/profile">
-        <v-list-item-action>
-          <v-icon>account_circle</v-icon>
-        </v-list-item-action>
-        <v-list-item-title>Account info</v-list-item-title>
-      </v-list-item>
+        <v-list-item router to="/profile">
+          <v-list-item-action>
+            <v-icon>account_circle</v-icon>
+          </v-list-item-action>
+          <v-list-item-title>Account info</v-list-item-title>
+        </v-list-item>
       </v-flex>
       <v-flex xs12>
-        <v-list-item router to = "/createMeetup" v-if="admin === true">
+        <v-list-item router to="/createMeetup" v-if="admin === true">
           <v-list-item-action>
             <v-icon>card_travel</v-icon>
           </v-list-item-action>
@@ -52,27 +52,23 @@
         </v-list-item>
       </v-flex>
       <v-flex xs12>
-      <v-list-item router to = "/statistics" v-if="admin === true">
-        <v-list-item-action>
-          <v-icon>settings</v-icon>
-        </v-list-item-action>
-        <v-list-item-title>Statistics</v-list-item-title>
-      </v-list-item>
+        <v-list-item router to="/statistics" v-if="admin === true">
+          <v-list-item-action>
+            <v-icon>settings</v-icon>
+          </v-list-item-action>
+          <v-list-item-title>Statistics</v-list-item-title>
+        </v-list-item>
       </v-flex>
       <v-flex xs12>
-      <v-list-item  @click="onSignOut">
-        <v-list-item-action>
-          <v-icon>clear</v-icon>
-        </v-list-item-action>
-        <v-list-item-title>Sign Out</v-list-item-title>
-      </v-list-item>
+        <v-list-item @click="onSignOut">
+          <v-list-item-action>
+            <v-icon>clear</v-icon>
+          </v-list-item-action>
+          <v-list-item-title>Sign Out</v-list-item-title>
+        </v-list-item>
       </v-flex>
       <v-list>
-        <v-list-item
-          value="true"
-          v-for="(item, i) in items"
-          :key="i"
-        >
+        <v-list-item value="true" v-for="(item, i) in items" :key="i">
           <v-list-item-action>
             <v-icon v-html="item.icon"></v-icon>
           </v-list-item-action>
@@ -82,76 +78,21 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar
-      dark color="primary"
-    >
+    <v-toolbar dark color="primary">
       <div v-show="userIsAuthenticated" @click.stop="drawer = !drawer"></div>
       <v-toolbar-title class="white--text">Meeting App</v-toolbar-title>
       <v-spacer></v-spacer>
     </v-toolbar>
     <v-main>
-      <router-view/>
+      <router-view />
     </v-main>
-    <v-footer height="auto" class="primary">
-    <v-layout row wrap justify-center>
-      <v-btn class="white--text" @click="aboutUs = true"> About us </v-btn>
-      <v-dialog v-model="aboutUs" max-width="600">
-        <v-card>
-          <v-card-title>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel odio auctor, rutrum felis at, volutpat libero. Quisque sollicitudin pretium tortor, ut interdum nisi vestibulum et. Maecenas at diam id purus pharetra feugiat non at enim. Proin eleifend diam vitae arcu pellentesque ullamcorper ut quis lectus. Morbi rhoncus, nisl vel pellentesque commodo, nibh lorem pulvinar diam, vel auctor diam sapien vitae lectus. Integer ornare, enim auctor blandit sodales, diam eros congue leo, nec consequat dui orci sed mauris. Proin tincidunt sagittis libero, vitae sagittis felis blandit id. Donec dictum metus quis lectus tempus aliquam. In mattis mi ac leo ornare varius. Nulla tempor, mauris lobortis viverra gravida, ex diam rutrum enim, id mattis ligula elit sit amet turpis. Curabitur consequat dolor sit amet iaculis laoreet. Aliquam nec aliquam nulla. Vestibulum vehicula magna vel lectus molestie, ut auctor nisl cursus. Aenean ut hendrerit tellus.
-          </v-card-title>
-        </v-card>
-      </v-dialog>
-      <v-btn class="white--text" @click="terms = true" > Terms and conditions </v-btn>
-      <v-dialog v-model="terms" max-width="600">
-        <v-card>
-          <v-card-title>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel odio auctor, rutrum felis at, volutpat libero. Quisque sollicitudin pretium tortor, ut interdum nisi vestibulum et. Maecenas at diam id purus pharetra feugiat non at enim. Proin eleifend diam vitae arcu pellentesque ullamcorper ut quis lectus. Morbi rhoncus, nisl vel pellentesque commodo, nibh lorem pulvinar diam, vel auctor diam sapien vitae lectus. Integer ornare, enim auctor blandit sodales, diam eros congue leo, nec consequat dui orci sed mauris. Proin tincidunt sagittis libero, vitae sagittis felis blandit id. Donec dictum metus quis lectus tempus aliquam. In mattis mi ac leo ornare varius. Nulla tempor, mauris lobortis viverra gravida, ex diam rutrum enim, id mattis ligula elit sit amet turpis. Curabitur consequat dolor sit amet iaculis laoreet. Aliquam nec aliquam nulla. Vestibulum vehicula magna vel lectus molestie, ut auctor nisl cursus. Aenean ut hendrerit tellus.
-          </v-card-title>
-        </v-card>
-      </v-dialog>
-      <v-btn class="white--text" @click="contact = true"> Contact </v-btn>
-      <v-dialog v-model="contact" max-width="600">
-        <v-card>
-         <form>
-          <v-layout row>
-            <v-flex xs12 sm6 offset-sm3>
-              <v-text-field
-                label="Enter your E-mail"
-                v-model="email"
-              >
-              </v-text-field>
-            </v-flex>
-          </v-layout>
-          <v-layout row>
-            <v-flex xs12 sm6 offset-sm3>
-              <v-text-field
-                name="description"
-                label="description"
-                id="description"
-                v-model="description"
-               ></v-text-field>
-            </v-flex>
-          </v-layout>
-           <v-layout row>
-            <v-flex xs12 sm6 offset-sm3>
-              <v-btn
-                class="primary"
-                type="submit"
-                route to='/'>Send message</v-btn>
-              <v-btn color="primary" router to = "/" @click="contact = false">Back</v-btn>
-            </v-flex>
-          </v-layout>
-        </form>
-        </v-card>
-      </v-dialog>
-    </v-layout>
-  </v-footer>
   </v-app>
 </template>
 
 <style>
-a, ul, li {
+a,
+ul,
+li {
   text-decoration: none;
   list-style-type: none;
 }
@@ -164,65 +105,67 @@ a, ul, li {
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       clipped: true,
       drawer: false,
       fixed: false,
-      aboutUs: false,
-      contact: false,
-      terms: false,
-      email: '',
-      description: '',
-      items: [{
-        icon: 'bubble_chart',
-        title: 'Inspire'
-      }],
-      miniVariant: false
-    }
+      email: "",
+      description: "",
+      items: [
+        {
+          icon: "bubble_chart",
+          title: "Inspire",
+        },
+      ],
+      miniVariant: false,
+    };
   },
-  name: 'App',
-  created: function () {
-    this.$store.dispatch('readEvents')
-    this.$store.dispatch('AuthChange')
-    this.$store.dispatch('getUserData')
+  name: "App",
+  created: function() {
+    this.$store.dispatch("readEvents");
+    this.$store.dispatch("AuthChange");
+    this.$store.dispatch("getUserData");
   },
   computed: {
-    events () {
-      return this.$store.getters.events
+    events() {
+      return this.$store.getters.events;
     },
-    admin () {
-      return this.$store.getters.admin
+    admin() {
+      return this.$store.getters.admin;
     },
-    totalEvents () {
-      return this.$store.getters.events.length
+    totalEvents() {
+      return this.$store.getters.events.length;
     },
-    totalParticipari () {
-      return this.$store.getters.eventsGoing.length
+    totalParticipari() {
+      return this.$store.getters.eventsGoing.length;
     },
-    value () {
-      return Math.floor(this.totalParticipari * 100 / this.totalEvents)
+    value() {
+      return Math.floor((this.totalParticipari * 100) / this.totalEvents);
     },
-    color () {
-      if (this.value < 30) return 'red'
-      if (this.value < 60) return 'green'
-      if (this.value < 80) return 'blue'
-      return 'yellow'
+    color() {
+      if (this.value < 30) return "red";
+      if (this.value < 60) return "green";
+      if (this.value < 80) return "blue";
+      return "yellow";
     },
-    userIsAuthenticated () {
-      return this.$store.getters.user !== null && this.$store.getters.user !== undefined
+    userIsAuthenticated() {
+      return (
+        this.$store.getters.user !== null &&
+        this.$store.getters.user !== undefined
+      );
     },
-    location () {
-      return this.$store.getters.location
-    }
+    location() {
+      return this.$store.getters.location;
+    },
   },
-  mounted: function () {
-    this.$store.dispatch('getLocation')
+  mounted: function() {
+    this.$store.dispatch("getLocation");
   },
   methods: {
-    onSignOut () {
-      this.$store.dispatch('signOut')
-    }
-  }
-}
+    onSignOut() {
+      this.$store.dispatch("signOut");
+    },
+  },
+};
 </script>
