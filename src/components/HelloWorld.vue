@@ -59,7 +59,6 @@
           <v-flex xs12> 
             <v-menu
               ref="menu"
-              lazy
               :close-on-content-click="false"
               v-model="menu"
               transition="scale-transition"
@@ -83,7 +82,6 @@
             </v-menu>
             <v-menu
               ref="menu1"
-              lazy
               :close-on-content-click="false"
               v-model="menu1"
               transition="scale-transition"
@@ -106,7 +104,7 @@
               </v-date-picker>
             </v-menu>
           </v-flex>
-          <v-list-item avatar v-for="(event,index) in filterEvents" :key="index">
+          <v-list-item v-for="(event,index) in filterEvents" :key="index">
             <router-link :to="{ name: 'Events', params: { id: index }}" tag="li" style="cursor:pointer">
             <v-list-item-avatar>
               <img :src="event.avatar">
@@ -117,8 +115,8 @@
               <v-list-item-title>
                 {{event.titlu}}
               </v-list-item-title>
-              <v-list-item-sub-title v-html="event.descriere">
-              </v-list-item-sub-title>
+              <div> {{event.descriere}}
+              </div>
               </router-link>
             </v-list-item-content>
             <v-list-item-action>

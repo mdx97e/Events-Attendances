@@ -8,8 +8,7 @@
       v-model="drawer"
       enable-resize-watcher
       fixed
-      temporary
-    >
+      temporary>
       <div id="text" v-if="admin === false">
         <h1>Welcome</h1>
         <v-flex xs12>
@@ -52,14 +51,6 @@
         </v-list-item>
       </v-flex>
       <v-flex xs12>
-        <v-list-item router to="/statistics" v-if="admin === true">
-          <v-list-item-action>
-            <v-icon>settings</v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Statistics</v-list-item-title>
-        </v-list-item>
-      </v-flex>
-      <v-flex xs12>
         <v-list-item @click="onSignOut">
           <v-list-item-action>
             <v-icon>clear</v-icon>
@@ -82,10 +73,23 @@
       <div v-show="userIsAuthenticated" @click.stop="drawer = !drawer"></div>
       <v-toolbar-title class="white--text">Meeting App</v-toolbar-title>
       <v-spacer></v-spacer>
+      <el-button type="text" @click="loginDialog = true">Login</el-button>
     </v-toolbar>
     <v-main>
       <router-view />
     </v-main>
+
+    <el-dialog
+      title="Tips"
+      :visible.sync="loginDialog"
+      width="30%"
+      :before-close="handleClose">
+      <span>This is a message</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="loginDialog = false">Cancel</el-button>
+        <el-button type="primary" @click="loginDialog = false">Confirm</el-button>
+      </span>
+    </el-dialog>
   </v-app>
 </template>
 
@@ -110,6 +114,7 @@ export default {
       clipped: true,
       drawer: false,
       fixed: false,
+      loginDialog: false,
       email: "",
       description: "",
       items: [
@@ -166,6 +171,13 @@ export default {
     onSignOut() {
       this.$store.dispatch("signOut");
     },
+    handleClose(done) {
+        this.$confirm('Are you sure to close this dialog?')
+          .then(() => {
+            done();
+          })
+          .catch(() => {});
+      }
   },
 };
 </script>

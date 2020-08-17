@@ -25,13 +25,13 @@ export default new Router({
     {
       path: '/events/:id',
       name: 'Events',
-      component: Events,
-      beforeEnter: AuthGuard
+      component: Events
     },
     {
       path: '/profile',
       name: 'profile',
-      component: Profile
+      component: Profile,
+      beforeEnter: AuthGuard
     },
     {
       path: '/createmeetup',
@@ -41,8 +41,7 @@ export default new Router({
     {
       path: '/',
       name: 'HelloWorld',
-      component: HelloWorld,
-      beforeEnter: AuthGuard
+      component: HelloWorld
     }
   ]
 })

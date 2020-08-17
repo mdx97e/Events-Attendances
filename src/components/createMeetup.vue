@@ -31,7 +31,6 @@
           <v-flex xs12 sm6 offset-sm3>
             <v-menu
               ref="menuevent"
-              lazy
               :close-on-content-click="false"
               v-model="menuevent"
               transition="scale-transition"
