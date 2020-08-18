@@ -8,7 +8,8 @@
       v-model="drawer"
       enable-resize-watcher
       fixed
-      temporary>
+      temporary
+    >
       <div id="text" v-if="admin === false">
         <h1>Welcome</h1>
         <v-flex xs12>
@@ -73,60 +74,75 @@
       <div v-show="userIsAuthenticated" @click.stop="drawer = !drawer"></div>
       <v-toolbar-title class="white--text">Meeting App</v-toolbar-title>
       <v-spacer></v-spacer>
-      <el-button type="text" v-if="!userIsAuthenticated" @click="loginDialog = true">Login</el-button>
+      <el-button type="text" @click="loginSignupDialog = true">Login</el-button>
     </v-toolbar>
     <v-main>
       <router-view />
     </v-main>
 
-    <el-dialog
-      title="Login"
-      :visible.sync="loginDialog"
-    >
-      <v-form>
-        <v-text-field
-          label="Enter your E-mail"
-          v-model="email2"
-          :rules="[rules.required, rules.email]"
-        >
-        </v-text-field>
-        <v-text-field
-          name="input-10-1"
-          label="Enter your password"
-          hint="At least 8 characters"
-          v-model="password"
-          min="8"
-          :append-icon="e1 ? 'visibility' : 'visibility_off'"
-          :append-icon-cb="() => (e1 = !e1)"
-          :type="e1 ? 'password' : 'text'"
-          :rules="[rules.required]"
-          counter
-        >
-        </v-text-field>
-      </v-form>
-      <v-alert :value="true" type="error" v-if="error !== null">
-        Incorrect email or password. Please try again.
-      </v-alert>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="loginDialog = false">Cancel</el-button>
+    <el-dialog title="Login" :visible.sync="loginSignupDialog">
+      <v-form v-if="signInActivated">
+        <el-input placeholder="Email" v-model="emailLogin"></el-input>
+        <el-input
+          placeholder="Password"
+          v-model="passwordLogin"
+          show-password
+        ></el-input>
+        <v-alert :value="true" type="error" v-if="error !== null">
+          Incorrect email or password. Please try again.
+        </v-alert>
         <el-button @click="forgotPassword">Forgot password</el-button>
-        <el-button type="primary" @click="userSignin">Confirm</el-button>
-      </span>
+        <el-button type="primary" @click="userSignin">Sign in</el-button>
+      </v-form>
+      <div class="no-content" v-if="signInActivated">
+        You don't have an account?
+        <el-button type="primary" @click="signInActivated = false"
+          >Sign up</el-button
+        >
+      </div>
+      <div class="no-content" v-if="!signInActivated">
+        Do you have an account?
+        <el-button type="primary" @click="signInActivated = true"
+          >Sign in</el-button
+        >
+      </div>
+      <v-form v-if="!signInActivated">
+        <el-input placeholder="Name" v-model="numeSignUp"></el-input>
+        <el-input placeholder="Surname" v-model="prenumeSignUp"></el-input>
+        <el-input placeholder="Email" v-model="email2"></el-input>
+        <el-input
+          placeholder="Password"
+          v-model="passwordSignUp"
+          show-password
+        ></el-input>
+        <el-button type="primary" @click="userSignUp">Sign Up</el-button>
+      </v-form>
     </el-dialog>
   </v-app>
 </template>
 
 <style>
-a,
-ul,
-li {
-  text-decoration: none;
-  list-style-type: none;
+.el-dialog__body {
+  display: flex;
+  flex-flow: row;
 }
-#text {
-  margin: 0;
-  padding: 10% 0% 10% 0%;
+.el-dialog {
+  width: 80vw !important;
+  background-color: lightgray !important;
+  height: 50vw;
+}
+form {
+  width: 50%;
+  height: 100%;
+  text-align: -webkit-center;
+}
+.no-content {
+  width: 50%; 
+  height: 100%;
+  display: flex;
+  flex-flow: column;
   text-align: center;
+  align-self: center;
 }
 </style>
 
@@ -137,9 +153,10 @@ export default {
   data() {
     return {
       clipped: true,
+      signInActivated: true,
       drawer: false,
       fixed: false,
-      loginDialog: false,
+      loginSignupDialog: false,
       email: "",
       description: "",
       items: [
@@ -149,17 +166,14 @@ export default {
         },
       ],
       miniVariant: false,
-      // login part
-      e1: true,
-      password: "",
+      showPasswordIcon: true,
+      passwordLogin: "",
+      emailLogin: "",
+      showPasswordIcon2: true,
+      passwordSignUp: "",
       email2: "",
-      rules: {
-        required: (value) => !!value || "Required.",
-        email: (value) => {
-          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-          return pattern.test(value) || "Invalid e-mail.";
-        },
-      },
+      numeSignUp: null,
+      prenumeSignUp: null,
     };
   },
   created: function() {
@@ -205,6 +219,12 @@ export default {
     error() {
       return this.$store.getters.error;
     },
+    // signup part
+    comparePasswords() {
+      return this.password !== this.confirmPassword
+        ? "Passwords do not match"
+        : "";
+    },
   },
   mounted: function() {
     this.$store.dispatch("getLocation");
@@ -235,6 +255,15 @@ export default {
         .catch(function(error) {
           window.alert(error.message);
         });
+    },
+    // signup part
+    userSignUp() {
+      this.$store.dispatch("signUp", {
+        email: this.email,
+        password: this.password,
+        nume: this.nume,
+        prenume: this.prenume,
+      });
     },
   },
 };

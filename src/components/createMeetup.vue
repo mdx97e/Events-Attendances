@@ -41,7 +41,6 @@
               :return-value.sync="dateevent"
             >
               <v-text-field
-                slot="activator"
                 label="Meeting date"
                 v-model="dateevent"
                 prepend-icon="event"

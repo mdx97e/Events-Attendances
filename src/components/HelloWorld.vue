@@ -4,7 +4,7 @@
       <v-layout column align-center>
         <v-list two-line>
           <v-menu offset-y>
-            <v-btn color="primary" dark slot="activator">
+            <v-btn color="primary" dark>
               Month
             </v-btn>
             <v-list>
@@ -29,7 +29,7 @@
             </v-list>
           </v-menu>
           <v-menu offset-y>
-            <v-btn  color="primary" dark slot="activator">
+            <v-btn  color="primary" dark>
               Year
             </v-btn>
             <v-list>
@@ -68,7 +68,6 @@
               :return-value.sync="date"
             >
               <v-text-field
-                slot="activator"
                 label="Start date"
                 v-model="date"
                 prepend-icon="event"
@@ -91,7 +90,6 @@
               :return-value.sync="date1"
             >
               <v-text-field
-                slot="activator"
                 label="End date"
                 v-model="date1"
                 prepend-icon="event"
@@ -221,6 +219,9 @@
       events () {
         return this.$store.getters.events
       },
+      user () {
+        return this.$store.getters.user
+      },
       keysEvents () {
         return this.$store.getters.keysEvents
       },
@@ -281,7 +282,9 @@
       }
     },
     created: function () {
+      if (this.user && this.user.uid) {
       this.$store.dispatch('getEventsGoing')
+      }
     },
     methods: {
       getLocation () {
