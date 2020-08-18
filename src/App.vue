@@ -69,25 +69,48 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar dark color="primary">
+    <v-toolbar color="secondary">
       <div v-show="userIsAuthenticated" @click.stop="drawer = !drawer"></div>
       <v-toolbar-title class="white--text">Meeting App</v-toolbar-title>
       <v-spacer></v-spacer>
-      <el-button type="text" @click="loginDialog = true">Login</el-button>
+      <el-button type="text" v-if="!userIsAuthenticated" @click="loginDialog = true">Login</el-button>
     </v-toolbar>
     <v-main>
       <router-view />
     </v-main>
 
     <el-dialog
-      title="Tips"
+      title="Login"
       :visible.sync="loginDialog"
-      width="30%"
-      :before-close="handleClose">
-      <span>This is a message</span>
+    >
+      <v-form>
+        <v-text-field
+          label="Enter your E-mail"
+          v-model="email2"
+          :rules="[rules.required, rules.email]"
+        >
+        </v-text-field>
+        <v-text-field
+          name="input-10-1"
+          label="Enter your password"
+          hint="At least 8 characters"
+          v-model="password"
+          min="8"
+          :append-icon="e1 ? 'visibility' : 'visibility_off'"
+          :append-icon-cb="() => (e1 = !e1)"
+          :type="e1 ? 'password' : 'text'"
+          :rules="[rules.required]"
+          counter
+        >
+        </v-text-field>
+      </v-form>
+      <v-alert :value="true" type="error" v-if="error !== null">
+        Incorrect email or password. Please try again.
+      </v-alert>
       <span slot="footer" class="dialog-footer">
         <el-button @click="loginDialog = false">Cancel</el-button>
-        <el-button type="primary" @click="loginDialog = false">Confirm</el-button>
+        <el-button @click="forgotPassword">Forgot password</el-button>
+        <el-button type="primary" @click="userSignin">Confirm</el-button>
       </span>
     </el-dialog>
   </v-app>
@@ -108,7 +131,9 @@ li {
 </style>
 
 <script>
+import firebase from "@/firebase";
 export default {
+  name: "App",
   data() {
     return {
       clipped: true,
@@ -124,9 +149,19 @@ export default {
         },
       ],
       miniVariant: false,
+      // login part
+      e1: true,
+      password: "",
+      email2: "",
+      rules: {
+        required: (value) => !!value || "Required.",
+        email: (value) => {
+          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          return pattern.test(value) || "Invalid e-mail.";
+        },
+      },
     };
   },
-  name: "App",
   created: function() {
     this.$store.dispatch("readEvents");
     this.$store.dispatch("AuthChange");
@@ -163,6 +198,13 @@ export default {
     location() {
       return this.$store.getters.location;
     },
+    // login part
+    user() {
+      return this.$store.getters.user;
+    },
+    error() {
+      return this.$store.getters.error;
+    },
   },
   mounted: function() {
     this.$store.dispatch("getLocation");
@@ -171,13 +213,29 @@ export default {
     onSignOut() {
       this.$store.dispatch("signOut");
     },
-    handleClose(done) {
-        this.$confirm('Are you sure to close this dialog?')
-          .then(() => {
-            done();
-          })
-          .catch(() => {});
-      }
+    // login part
+    userSignin() {
+      this.$store.dispatch("signIn", {
+        email: this.email,
+        password: this.password,
+      });
+    },
+    forgotPassword() {
+      this.loginDialog = false;
+      const emailprompt = prompt("Introdu adresa de email", "");
+      firebase
+        .auth()
+        .sendPasswordResetEmail(emailprompt)
+        .then(function() {
+          window.alert(
+            "A fost trimis un email de recuperare a parolei la adresa: " +
+              emailprompt
+          );
+        })
+        .catch(function(error) {
+          window.alert(error.message);
+        });
+    },
   },
 };
 </script>
