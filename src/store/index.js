@@ -75,7 +75,7 @@ export default new Vuex.Store({
             var eventdetails = {}
             eventdetails.avatar = myObj[key].avatar
             eventdetails.descriere = myObj[key].descriere
-            eventdetails.id = myObj[key].id
+            eventdetails.id = key
             eventdetails.prezenta = myObj[key].prezenta
             eventdetails.titlu = myObj[key].titlu
             eventdetails.data = new Date(myObj[key].data)

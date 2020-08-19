@@ -34,11 +34,6 @@
         return this.events;
       }
     },
-    filters: {
-      // filtru (date) {
-      //   return moment(date).fromNow()
-      // }
-    },
     created: function () {
       if (this.user && this.user.uid) {
       this.$store.dispatch('getEventsGoing')

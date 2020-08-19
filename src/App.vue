@@ -94,13 +94,13 @@
       </v-form>
       <div class="no-content" v-if="signInActivated">
         <div class="dialog-description-form">You don't have an account?</div>
-        <el-button type="primary" @click="signInActivated = false"
+        <el-button @click="signInActivated = false"
           >Sign up</el-button
         >
       </div>
       <div class="no-content" v-if="!signInActivated">
         <div class="dialog-description-form">Do you have an account?</div>
-        <el-button type="primary" @click="signInActivated = true"
+        <el-button @click="signInActivated = true"
           >Sign in</el-button
         >
       </div>
