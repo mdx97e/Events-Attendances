@@ -124,12 +124,13 @@
   display: flex;
   flex-flow: row;
   padding: 0px !important;
+  height: 50vh !important;
 }
 .el-dialog {
-  width: 80vw !important;
   background-size: cover !important;
   background-image: url(/img/singinbackground.ce3dc37a.jpeg) !important;
-  height: 50vw;
+  height: 50%;
+  width: 50%;
 }
 .el-dialog__title {
   color:white !important;
