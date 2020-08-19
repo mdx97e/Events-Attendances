@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
-import Events from '@/components/Events'
-import SignUp from '@/components/SignUp'
-import Profile from '@/components/Profile'
-import createMeetup from '@/components/createMeetup'
+import HelloWorld from '@/pages/HelloWorld'
+import Events from '@/pages/Events'
+import SignUp from '@/pages/SignUp'
+import Profile from '@/pages/Profile'
+import createMeetup from '@/pages/createMeetup'
 import AuthGuard from './authGuard'
 
 Vue.use(Router)

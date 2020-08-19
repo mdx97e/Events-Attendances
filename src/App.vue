@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer
+    <!-- <v-navigation-drawer
       v-show="userIsAuthenticated"
       persistent
       :mini-variant="miniVariant"
@@ -8,8 +8,7 @@
       v-model="drawer"
       enable-resize-watcher
       fixed
-      temporary
-    >
+      temporary>
       <div id="text" v-if="admin === false">
         <h1>Welcome</h1>
         <v-flex xs12>
@@ -69,19 +68,18 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
-    </v-navigation-drawer>
-    <v-toolbar color="secondary">
-      <div v-show="userIsAuthenticated" @click.stop="drawer = !drawer"></div>
-      <v-toolbar-title class="white--text">Meeting App</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <el-button type="text" @click="loginSignupDialog = true">Login</el-button>
-    </v-toolbar>
+    </v-navigation-drawer> -->
+    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+      <el-menu-item index="1" disabled>Meeting App</el-menu-item>
+      <el-menu-item index="2" @click="loginSignupDialog = true">Login / SignUp</el-menu-item>
+    </el-menu>
+
     <v-main>
       <router-view />
     </v-main>
 
     <el-dialog title="Login" :visible.sync="loginSignupDialog">
-      <v-form v-if="signInActivated">
+      <v-form v-if="signInActivated" class="custom-form">
         <el-input placeholder="Email" v-model="emailLogin"></el-input>
         <el-input
           placeholder="Password"
@@ -91,22 +89,22 @@
         <v-alert :value="true" type="error" v-if="error !== null">
           Incorrect email or password. Please try again.
         </v-alert>
-        <el-button @click="forgotPassword">Forgot password</el-button>
+        <a @click="forgotPassword" class="forgot-password">Forgot password?</a>
         <el-button type="primary" @click="userSignin">Sign in</el-button>
       </v-form>
       <div class="no-content" v-if="signInActivated">
-        You don't have an account?
+        <div class="dialog-description-form">You don't have an account?</div>
         <el-button type="primary" @click="signInActivated = false"
           >Sign up</el-button
         >
       </div>
       <div class="no-content" v-if="!signInActivated">
-        Do you have an account?
+        <div class="dialog-description-form">Do you have an account?</div>
         <el-button type="primary" @click="signInActivated = true"
           >Sign in</el-button
         >
       </div>
-      <v-form v-if="!signInActivated">
+      <v-form v-if="!signInActivated" class="custom-form">
         <el-input placeholder="Name" v-model="numeSignUp"></el-input>
         <el-input placeholder="Surname" v-model="prenumeSignUp"></el-input>
         <el-input placeholder="Email" v-model="email2"></el-input>
@@ -125,24 +123,53 @@
 .el-dialog__body {
   display: flex;
   flex-flow: row;
+  padding: 0px !important;
 }
 .el-dialog {
   width: 80vw !important;
-  background-color: lightgray !important;
+  background-size: cover !important;
+  background-image: url(/img/singinbackground.ce3dc37a.jpeg) !important;
   height: 50vw;
+}
+.el-dialog__title {
+  color:white !important;
 }
 form {
   width: 50%;
   height: 100%;
   text-align: -webkit-center;
 }
-.no-content {
-  width: 50%; 
+.dialog-description-form {
+  color: white;
+  padding-bottom: 10px;
+  font-size: 1.3rem;
+}
+.custom-form {
+  background-color: white;
+  padding: 34px;
   height: 100%;
   display: flex;
   flex-flow: column;
-  text-align: center;
-  align-self: center;
+  align-items: center;
+  justify-content: center;
+}
+.el-input {
+  padding: 5px;
+}
+.forgot-password {
+  padding: 10px 0px;
+}
+.el-button {
+  width: 50%;
+}
+.no-content {
+  display: flex;
+  flex-flow: column;
+  margin-top: -10%;
+  align-items: center;
+  justify-content: center;
+  padding: 34px;
+  width: 50%;
 }
 </style>
 
