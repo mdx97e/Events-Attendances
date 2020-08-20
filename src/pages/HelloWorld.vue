@@ -10,6 +10,11 @@
 </template>
 
 <style scoped>
+.container {
+  display: flex;
+  flex-flow: wrap;
+  justify-content: center;
+}
 </style>
 
 <script>

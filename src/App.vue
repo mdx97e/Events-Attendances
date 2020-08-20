@@ -69,9 +69,9 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer> -->
-    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-      <el-menu-item index="1" disabled>Meeting App</el-menu-item>
-      <el-menu-item index="2" @click="loginSignupDialog = true">Login / SignUp</el-menu-item>
+    <el-menu class="el-menu-demo" mode="horizontal">
+      <el-menu-item>Meeting App</el-menu-item>
+      <el-menu-item @click="loginSignupDialog = true">Login / SignUp</el-menu-item>
     </el-menu>
 
     <v-main>

@@ -2,13 +2,17 @@
   <el-card class="box-card" shadow="hover">
     <img :src="item.avatar" class="avatar">
     <span class="title">{{ item.titlu }}</span>
-    {{ item.data | formatDate }} 
-    {{ item.descriere }}
-    {{ item.prezenti }}
+    <div class="date">{{ item.data | formatDate }} </div>
+    <div>{{ item.descriere }}</div>
+    <div class="actions">
+      <el-button type="secondary">Attend</el-button>
+    </div>
+    <!-- <el-button type="secondary">Remove</el-button> -->
   </el-card>
 </template>
 
 <script>
+import * as moment from 'moment'
 export default {
   name: "CustomCard",
   props: {
@@ -18,8 +22,7 @@ export default {
   },
   filters: {
     formatDate (date) {
-      return date
-      // return moment(date).fromNow()
+      return moment(date).fromNow();
     }
   }
 };
@@ -30,23 +33,29 @@ export default {
   display: flex;
   flex-flow: wrap;
 }
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
 .el-card {
   margin: 10px;
-  flex: 0 0 20%;
+  flex: 0 0 30%;
+  border-radius: 5px;
 }
 .el-card__header {
   padding: unset;
 }
 .avatar {
-  height: 100%;
   width: 100%;
+  height: fit-content;
   background-size: cover;
-}
-.title {
-  text-transform: uppercase;
-  padding: 10px;
+  border-radius: 5px;
 }
 .el-card__body { 
   padding: 0;
+}
+.date {
+  opacity: 0.5;
 }
 </style>
