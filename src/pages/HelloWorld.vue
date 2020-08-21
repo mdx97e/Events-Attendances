@@ -25,6 +25,18 @@
       :key="index"
     ></CustomCard>
     </div>
+
+ <el-dialog title="Select range" :visible.sync="dateRangeSelector">
+    <div>
+      <el-date-picker
+        v-model="dateRange"
+        type="daterange"
+        range-separator="To"
+        start-placeholder="Start date"
+        end-placeholder="End date">
+      </el-date-picker>
+    </div>
+ </el-dialog>
     <!-- TODO: show map? -->
     <!-- <div id="map"></div> -->
   </v-container>
@@ -59,6 +71,7 @@
 
 <script>
 import CustomCard from "../components/CustomCard";
+import * as moment from 'moment';
 export default {
   name: "profil",
   components: {
@@ -69,14 +82,26 @@ export default {
       optionsTimeline: [
         { value: 'past', label: 'Past events' },
         { value: 'thisweek', label: 'This week' },
-        { value: 'nextweek', label: 'Next week' },
         { value: 'customdate', label: 'Select dates between' },
-        { value: 'removed', label: 'Anytime' }
+        { value: 'anytime', label: 'Anytime' }
       ],
-      timelineFilter: 'thisweek',
-      textFilter: ''
+      timelineFilter: 'anytime',
+      textFilter: '',
+      dateRange: '',
+      dateRangeSelector: false
     };
   },
+  // watch: {
+  //   Destination: {
+  //     deep: true,
+  //     immediate: false,
+  //     handler (newDest) {
+  //       if (newDest && this.directions.service) {
+  //         this.renderDirections()
+  //       }
+  //     }
+  //   }
+  // },
   computed: {
     events() {
       return this.$store.getters.events;
@@ -86,7 +111,7 @@ export default {
     },
     filterEvents() {
 
-      return this.events.filter(item => this.textIncludedInTitleOrDescription(item));
+      return this.events.filter(item => this.titleAndDescriptionFilter(item) && this.dateFilter(item.data));
     },
   },
   created: function() {
@@ -95,10 +120,20 @@ export default {
     }
   },
   methods: {
-    textIncludedInTitleOrDescription(item) {
+    titleAndDescriptionFilter(item) {
       let textToSearch = this.textFilter.toLowerCase();
       return item.titlu.toLowerCase().includes(textToSearch) || item.descriere.toLowerCase().includes(textToSearch);
+    },
+    dateFilter(date) {
+      console.log(new Date())
+      switch (this.timelineFilter) {
+        case 'anytime': return true;
+        case 'past': return moment(date).isBefore(new Date());
+        case 'thisweek': return moment().isoWeek() == moment(date).isoWeek();
+        case 'customdate': return '';
+      }
     }
+
     // TODO: Let click going only if is near by event
     // getLocation () {
     //   this.$store.dispatch('getLocation')
