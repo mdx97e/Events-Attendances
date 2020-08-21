@@ -40,8 +40,8 @@ export default {
 }
 .el-card {
   margin: 10px;
-  flex: 0 0 30%;
   border-radius: 5px;
+  width: 250px;
 }
 .el-card__header {
   padding: unset;

@@ -78,7 +78,7 @@
       <router-view />
     </v-main>
 
-    <el-dialog title="Login" :visible.sync="loginSignupDialog">
+    <el-dialog :title="signInActivated ? 'Login' : 'Sign up'" :visible.sync="loginSignupDialog">
       <v-form v-if="signInActivated" class="custom-form">
         <el-input placeholder="Email" v-model="emailLogin"></el-input>
         <el-input
@@ -128,7 +128,7 @@
 }
 .el-dialog {
   background-size: cover !important;
-  background-image: url(/img/singinbackground.ce3dc37a.jpeg) !important;
+  background-image: url('./assets/singinbackground.jpeg') !important;
   height: 50%;
   width: 50%;
 }
