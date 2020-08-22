@@ -25,18 +25,6 @@
       :key="index"
     ></CustomCard>
     </div>
-
- <el-dialog title="Select range" :visible.sync="dateRangeSelector">
-    <div>
-      <el-date-picker
-        v-model="dateRange"
-        type="daterange"
-        range-separator="To"
-        start-placeholder="Start date"
-        end-placeholder="End date">
-      </el-date-picker>
-    </div>
- </el-dialog>
     <!-- TODO: show map? -->
     <!-- <div id="map"></div> -->
   </v-container>
@@ -67,6 +55,11 @@
   display: flex;
   width: 50%;
 }
+.grid-title {
+      align-self: center;
+    font-size: 2rem;
+    font-family: serif;
+}
 </style>
 
 <script>
@@ -82,26 +75,14 @@ export default {
       optionsTimeline: [
         { value: 'past', label: 'Past events' },
         { value: 'thisweek', label: 'This week' },
-        { value: 'customdate', label: 'Select dates between' },
+        { value: 'nextweek', label: 'Next week' },
+        { value: 'future', label: 'Future events' },
         { value: 'anytime', label: 'Anytime' }
       ],
       timelineFilter: 'anytime',
-      textFilter: '',
-      dateRange: '',
-      dateRangeSelector: false
+      textFilter: ''
     };
   },
-  // watch: {
-  //   Destination: {
-  //     deep: true,
-  //     immediate: false,
-  //     handler (newDest) {
-  //       if (newDest && this.directions.service) {
-  //         this.renderDirections()
-  //       }
-  //     }
-  //   }
-  // },
   computed: {
     events() {
       return this.$store.getters.events;
@@ -125,12 +106,12 @@ export default {
       return item.titlu.toLowerCase().includes(textToSearch) || item.descriere.toLowerCase().includes(textToSearch);
     },
     dateFilter(date) {
-      console.log(new Date())
       switch (this.timelineFilter) {
         case 'anytime': return true;
         case 'past': return moment(date).isBefore(new Date());
         case 'thisweek': return moment().isoWeek() == moment(date).isoWeek();
-        case 'customdate': return '';
+        case 'nextweek': return moment().isoWeek() == (moment(date).isoWeek() + 1);
+        case 'future': return moment(date).isSameOrAfter(new Date());
       }
     }
 
