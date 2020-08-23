@@ -68,12 +68,21 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
-    </v-navigation-drawer> -->
+    </v-navigation-drawer>-->
     <el-menu class="el-menu-demo" mode="horizontal">
-      <el-menu-item>Meeting App</el-menu-item>
-      <el-menu-item @click="openLoginSignupDialog" v-if='!userIsAuthenticated'>Login / SignUp</el-menu-item>
-      <el-menu-item @click="onSignOut" v-if='userIsAuthenticated'> Logout</el-menu-item>
+      <el-menu-item @click="goToHp">Meeting App</el-menu-item>
+      <el-menu-item @click="openLoginSignupDialog" v-if="!userIsAuthenticated">Login / SignUp</el-menu-item>
+      <!-- <el-menu-item @click="onSignOut" v-if="userIsAuthenticated">Logout</el-menu-item> -->
+      <el-menu-item v-if="userIsAuthenticated">
+        <el-dropdown @command="handleAvatarDropdown">
+          <el-avatar size="medium" :src="circleUrl"></el-avatar>
 
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="goToProfilePage">Profile</el-dropdown-item>
+            <el-dropdown-item command="signOut">Logout</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </el-menu-item>
     </el-menu>
 
     <v-main>
@@ -83,38 +92,28 @@
     <el-dialog :title="signInActivated ? 'Login' : 'Sign up'" :visible.sync="loginSignupDialog">
       <v-form v-if="signInActivated" class="custom-form">
         <el-input placeholder="Email" v-model="emailLogin"></el-input>
-        <el-input
-          placeholder="Password"
-          v-model="passwordLogin"
-          show-password
-        ></el-input>
-        <v-alert :value="true" type="error" v-if="error !== null">
-          Incorrect email or password. Please try again.
-        </v-alert>
+        <el-input placeholder="Password" v-model="passwordLogin" show-password></el-input>
+        <v-alert
+          :value="true"
+          type="error"
+          v-if="error !== null"
+        >Incorrect email or password. Please try again.</v-alert>
         <a @click="forgotPassword" class="forgot-password">Forgot password?</a>
         <el-button type="primary" @click="userSignin">Sign in</el-button>
       </v-form>
       <div class="no-content" v-if="signInActivated">
         <div class="dialog-description-form">You don't have an account?</div>
-        <el-button @click="signInActivated = false"
-          >Sign up</el-button
-        >
+        <el-button @click="signInActivated = false">Sign up</el-button>
       </div>
       <div class="no-content" v-if="!signInActivated">
         <div class="dialog-description-form">Do you have an account?</div>
-        <el-button @click="signInActivated = true"
-          >Sign in</el-button
-        >
+        <el-button @click="signInActivated = true">Sign in</el-button>
       </div>
       <v-form v-if="!signInActivated" class="custom-form">
         <el-input placeholder="Name" v-model="numeSignUp"></el-input>
         <el-input placeholder="Surname" v-model="prenumeSignUp"></el-input>
         <el-input placeholder="Email" v-model="emailSignUp"></el-input>
-        <el-input
-          placeholder="Password"
-          v-model="passwordSignUp"
-          show-password
-        ></el-input>
+        <el-input placeholder="Password" v-model="passwordSignUp" show-password></el-input>
         <el-button type="primary" @click="userSignUp">Sign Up</el-button>
       </v-form>
     </el-dialog>
@@ -130,12 +129,12 @@
 }
 .el-dialog {
   background-size: cover !important;
-  background-image: url('./assets/singinbackground.jpeg') !important;
+  background-image: url("./assets/singinbackground.jpeg") !important;
   height: 50%;
   width: 50%;
 }
 .el-dialog__title {
-  color:white !important;
+  color: white !important;
 }
 form {
   width: 50%;
@@ -178,6 +177,7 @@ form {
 
 <script>
 import firebase from "@/firebase";
+import router from "./router";
 export default {
   name: "App",
   data() {
@@ -203,9 +203,11 @@ export default {
       emailSignUp: "",
       numeSignUp: null,
       prenumeSignUp: null,
+      circleUrl:
+        "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
     };
   },
-  created: function() {
+  created: function () {
     this.$store.dispatch("readEvents");
     this.$store.dispatch("AuthChange");
     this.$store.dispatch("getUserData");
@@ -255,7 +257,7 @@ export default {
         : "";
     },
   },
-  mounted: function() {
+  mounted: function () {
     this.$store.dispatch("getLocation");
   },
   methods: {
@@ -275,13 +277,13 @@ export default {
       firebase
         .auth()
         .sendPasswordResetEmail(emailprompt)
-        .then(function() {
+        .then(function () {
           window.alert(
             "A fost trimis un email de recuperare a parolei la adresa: " +
               emailprompt
           );
         })
-        .catch(function(error) {
+        .catch(function (error) {
           window.alert(error.message);
         });
     },
@@ -294,9 +296,22 @@ export default {
         prenume: this.prenumeSignUp,
       });
     },
-    openLoginSignupDialog () {
-      this.$store.dispatch('loginSignupDialog', true)
-    }
+    openLoginSignupDialog() {
+      this.$store.dispatch("loginSignupDialog", true);
+    },
+    goToHp() {
+      router.push("/");
+    },
+    handleAvatarDropdown(command) {
+      switch (command) {
+        case "goToProfilePage":
+          router.push("/profile");
+          break;
+        case "signOut":
+          this.onSignOut();
+          break;
+      }
+    },
   },
 };
 </script>
