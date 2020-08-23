@@ -71,7 +71,9 @@
     </v-navigation-drawer> -->
     <el-menu class="el-menu-demo" mode="horizontal">
       <el-menu-item>Meeting App</el-menu-item>
-      <el-menu-item @click="loginSignupDialog = true">Login / SignUp</el-menu-item>
+      <el-menu-item @click="openLoginSignupDialog" v-if='!userIsAuthenticated'>Login / SignUp</el-menu-item>
+      <el-menu-item @click="onSignOut" v-if='userIsAuthenticated'> Logout</el-menu-item>
+
     </el-menu>
 
     <v-main>
@@ -107,7 +109,7 @@
       <v-form v-if="!signInActivated" class="custom-form">
         <el-input placeholder="Name" v-model="numeSignUp"></el-input>
         <el-input placeholder="Surname" v-model="prenumeSignUp"></el-input>
-        <el-input placeholder="Email" v-model="email2"></el-input>
+        <el-input placeholder="Email" v-model="emailSignUp"></el-input>
         <el-input
           placeholder="Password"
           v-model="passwordSignUp"
@@ -184,7 +186,6 @@ export default {
       signInActivated: true,
       drawer: false,
       fixed: false,
-      loginSignupDialog: false,
       email: "",
       description: "",
       items: [
@@ -199,7 +200,7 @@ export default {
       emailLogin: "",
       showPasswordIcon2: true,
       passwordSignUp: "",
-      email2: "",
+      emailSignUp: "",
       numeSignUp: null,
       prenumeSignUp: null,
     };
@@ -212,9 +213,6 @@ export default {
   computed: {
     events() {
       return this.$store.getters.events;
-    },
-    admin() {
-      return this.$store.getters.admin;
     },
     totalEvents() {
       return this.$store.getters.events.length;
@@ -240,6 +238,9 @@ export default {
     location() {
       return this.$store.getters.location;
     },
+    loginSignupDialog() {
+      return this.$store.getters.loginSignupDialog;
+    },
     // login part
     user() {
       return this.$store.getters.user;
@@ -264,8 +265,8 @@ export default {
     // login part
     userSignin() {
       this.$store.dispatch("signIn", {
-        email: this.email,
-        password: this.password,
+        email: this.emailLogin,
+        password: this.passwordLogin,
       });
     },
     forgotPassword() {
@@ -287,12 +288,15 @@ export default {
     // signup part
     userSignUp() {
       this.$store.dispatch("signUp", {
-        email: this.email,
-        password: this.password,
-        nume: this.nume,
-        prenume: this.prenume,
+        email: this.emailSignUp,
+        password: this.passwordSignUp,
+        nume: this.numeSignUp,
+        prenume: this.prenumeSignUp,
       });
     },
+    openLoginSignupDialog () {
+      this.$store.dispatch('loginSignupDialog', true)
+    }
   },
 };
 </script>

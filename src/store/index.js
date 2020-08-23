@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import firebase from '@/firebase'
-import router from '@/router'
 
 Vue.use(Vuex)
 
@@ -21,16 +20,17 @@ export default new Vuex.Store({
     keysUsers: [],
     userdetails: [],
     eventsGoing: [],
-    admin: null,
     image: null,
     uploadPicture: [],
-    error: null
+    error: null,
+    loginSignupDialog: false,
+
   },
   mutations: {
-    setError (state, payload) {
+    setError(state, payload) {
       state.error = payload
     },
-    setUser (state, payload) {
+    setUser(state, payload) {
       state.user = payload
     },
     getEvents: (state, payload) => {
@@ -51,7 +51,7 @@ export default new Vuex.Store({
     eventsGoing: (state, payload) => {
       state.eventsGoing = payload
     },
-    uploadPicture (state, payload) {
+    uploadPicture(state, payload) {
       state.uploadPicture.push(payload)
     },
     emptyEvents: (state) => {
@@ -60,12 +60,12 @@ export default new Vuex.Store({
     emptyGoing: (state) => {
       state.eventsGoing = []
     },
-    getAdmin: (state, payload) => {
-      state.admin = payload
-    }
+    setLoginSignupDialog: (state, payload) => {
+      state.loginSignupDialog = payload
+    },
   },
   actions: {
-    readEvents ({commit}) {
+    readEvents({ commit }) {
       return firebase.database().ref('events')
         .on('value', snap => {
           commit('emptyEvents')
@@ -87,11 +87,11 @@ export default new Vuex.Store({
           console.log('Error: ' + error.message)
         })
     },
-    deleteEvent ({state}, payload) {
+    deleteEvent({ state }, payload) {
       console.og(state);
       firebase.database().ref('/events/' + this.state.keysEvents[payload]).remove()
     },
-    deleteComment ({state}, payload) {
+    deleteComment({ state }, payload) {
       console.og(state);
       var comments = []
       firebase.database().ref('/events/' + this.state.keysEvents[payload.idevent] + '/comments/')
@@ -106,7 +106,7 @@ export default new Vuex.Store({
         })
       firebase.database().ref('/events/' + this.state.keysEvents[payload.idevent] + '/comments/' + comments[payload.index]).remove()
     },
-    getUserData ({commit}) {
+    getUserData({ commit }) {
       return firebase.database().ref('users')
         .on('value', snap => {
           const myObj = snap.val()
@@ -123,7 +123,7 @@ export default new Vuex.Store({
           console.log('Error: ' + error.message)
         })
     },
-    signUp ({commit}, payload) {
+    signUp({ commit }, payload) {
       firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
         .then(
           user => {
@@ -131,11 +131,10 @@ export default new Vuex.Store({
               id: user.uid
             }
             commit('setUser', newUser)
-            router.push({path: '/'})
+            commit('setLoginSignupDialog', false)
             firebase.database().ref('/users/' + newUser.id).set({
               nume: payload.nume,
               prenume: payload.prenume,
-              admin: false,
               image: '',
               participari: ''
             })
@@ -147,7 +146,7 @@ export default new Vuex.Store({
           }
         )
     },
-    signIn ({commit}, payload) {
+    signIn({ commit }, payload) {
       firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
         .then(
           user => {
@@ -155,39 +154,24 @@ export default new Vuex.Store({
               id: user.uid
             }
             commit('setUser', newUser)
-            firebase.database().ref('users/' + newUser.id)
-              .on('value', snap => {
-                const myObj = snap.val()
-                var admin = myObj.admin
-                commit('getAdmin', admin)
-              }, function (error) {
-                console.log('Error: ' + error.message)
-              })
-          }
-        )
+            commit('setLoginSignupDialog', false)
+          })
         .catch(
           error => {
             commit('setError', error)
           }
         )
     },
-    AuthChange ({commit}) {
+    AuthChange({ commit }) {
       firebase.auth().onAuthStateChanged((user) => {
         if (user) {
-          firebase.database().ref('users/' + user.uid)
-            .on('value', snap => {
-              const myObj = snap.val()
-              commit('getAdmin', myObj.admin)
-            }, error => {
-              console.log('Error: ' + error.message)
-            })
           commit('setUser', user)
         } else {
           commit('setUser', null)
         }
       })
     },
-    signOut ({commit}) {
+    signOut({ commit }) {
       firebase.auth().signOut().then(function () {
         commit('setUser', null)
       }).catch(
@@ -195,7 +179,7 @@ export default new Vuex.Store({
           console.log(error)
         })
     },
-    getLocation ({commit}) {
+    getLocation({ commit }) {
       return navigator.geolocation.getCurrentPosition(pos => {
         commit('getLocation', {
           lat: pos.coords.latitude,
@@ -203,18 +187,20 @@ export default new Vuex.Store({
           acc: pos.coords.accuracy
         })
       },
-      error => {
-        window.alert(error.message)
-      }, { enableHighAccuracy: true,
-        maximumAge: 0 })
+        error => {
+          window.alert(error.message)
+        }, {
+        enableHighAccuracy: true,
+        maximumAge: 0
+      })
     },
-    changeDetails (payload) {
+    changeDetails(payload) {
       const cale = firebase.database().ref('users/' + this.state.user.uid)
       console.log(cale)
       console.log(payload.nume, payload.prenume)
-      cale.update({nume: payload.nume, prenume: payload.prenume})
+      cale.update({ nume: payload.nume, prenume: payload.prenume })
     },
-    getEventsGoing ({commit}) {
+    getEventsGoing({ commit }) {
       return firebase.database().ref('/users/' + this.state.user.uid + '/participari')
         .on('value', snap => {
           commit('emptyGoing')
@@ -222,7 +208,7 @@ export default new Vuex.Store({
           commit('eventsGoing', participari)
         })
     },
-    Going ({commit}, payload) {
+    Going({ commit }, payload) {
       console.log(commit);
       const user = this.state.user.uid
       return firebase.database().ref('/users/' + user + '/participari/' + this.state.keysEvents[payload])
@@ -230,13 +216,17 @@ export default new Vuex.Store({
           text: true
         })
     },
-    setPrezenti ({state}, payload) {
+    setPrezenti({ state }, payload) {
       console.log(state)
       return firebase.database().ref('/events/' + this.state.keysEvents[payload])
         .update({
           prezenti: +this.state.events[payload].prezenti + 1
         })
-    }
+    },
+    loginSignupDialog({ commit }, payload) {
+        commit('setLoginSignupDialog', payload)
+    
+    },
   },
   getters: {
     events: state => state.events,
@@ -246,8 +236,8 @@ export default new Vuex.Store({
     keysUsers: state => state.keysUsers,
     keysEvents: state => state.keysEvents,
     eventsGoing: state => state.eventsGoing,
-    admin: state => state.admin,
     uploadPicture: state => state.uploadPicture,
-    error: state => state.error
+    error: state => state.error,
+    loginSignupDialog: state => state.loginSignupDialog
   }
 })
