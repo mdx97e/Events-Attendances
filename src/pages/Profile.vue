@@ -1,6 +1,6 @@
  <template>
    <v-container>
-      <v-layout justify-center>
+      <!-- <v-layout justify-center>
         <v-flex xs6>
           <img :src="getuserdetails.image" height="200" v-if="getuserdetails.image !== ''">
           <input type="file"  style="display:none" ref="pictureInput" accept="image/*" @change="pictureSelect">
@@ -77,11 +77,12 @@
             </v-flex>
           </v-layout>
         </v-flex>
-      </v-layout>
+      </v-layout> -->
+      Future profile dialog
    </v-container>
  </template>
 
-<style>
+<!-- <style>
 img {
   margin: 0;
   padding: 0;
@@ -89,7 +90,7 @@ img {
 #imagine {
   display: block;
 }
-</style>
+</style> -->
 
 <script>
 import firebase from '@/firebase'
