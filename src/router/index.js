@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/pages/HelloWorld'
-import Events from '@/pages/Events'
+import eventDetails from '@/pages/eventDetails'
 import SignUp from '@/pages/SignUp'
 import Profile from '@/pages/Profile'
 import createMeetup from '@/pages/createMeetup'
@@ -17,9 +17,9 @@ export default new Router({
       component: SignUp
     },
     {
-      path: '/events/:id',
-      name: 'Events',
-      component: Events
+      path: '/eventDetails/:id',
+      name: 'eventDetails',
+      component: eventDetails
     },
     {
       path: '/profile',

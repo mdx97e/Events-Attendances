@@ -2,12 +2,12 @@
   <el-card class="box-card" shadow="hover">
     <img :src="item.avatar" class="avatar">
     <span class="title">{{ item.titlu }}</span>
-    <div class="date">{{ item.data | formatDate }} </div>
+    <div class="low-opacity-text date">{{ item.data | formatDate }} </div>
     <div>{{ item.descriere }}</div>
     <div class="actions">
-      <el-button type="secondary">Attend</el-button>
+      <div class="low-opacity-text attending-text">Attending <i class="el-icon-check"></i></div>
+      <el-button type="secondary" @click="goToDetailsPage()">See details</el-button>
     </div>
-    <!-- <el-button type="secondary">Remove</el-button> -->
   </el-card>
 </template>
 
@@ -24,6 +24,11 @@ export default {
     formatDate (date) {
       return moment(date).fromNow();
     }
+  },
+  methods: {
+    goToDetailsPage() {
+       this.$router.push("/eventDetails/" + this.item.id);
+    }
   }
 };
 </script>
@@ -34,9 +39,10 @@ export default {
   flex-flow: wrap;
 }
 .actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 10px;
+      display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    align-items: center;
 }
 .el-card {
   margin: 10px;
@@ -45,6 +51,9 @@ export default {
 }
 .el-card__header {
   padding: unset;
+}
+.date {
+  font-size: 14px;
 }
 .avatar {
   width: 100%;
@@ -55,7 +64,7 @@ export default {
 .el-card__body { 
   padding: 0;
 }
-.date {
-  opacity: 0.5;
+.attending-text {
+  font-size: 10px;
 }
 </style>

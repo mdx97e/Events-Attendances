@@ -156,6 +156,9 @@ form {
   align-items: center;
   justify-content: center;
 }
+.low-opacity-text {
+  opacity: 0.5;
+}
 .el-input {
   padding: 5px;
 }
