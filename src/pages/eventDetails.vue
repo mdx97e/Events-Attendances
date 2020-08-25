@@ -24,16 +24,6 @@
             </v-card>
           </v-flex>
           <v-btn color="primary" @click="participanti = true">Who's going</v-btn>
-        <v-list-item v-for="(comment,index) in comments" :key="index">
-          <v-list-item-title>
-            {{comment}}
-          </v-list-item-title>
-           <v-list-item-action v-if="admin === true">
-            <v-icon @click="deleteComment(index)" style="cursor:pointer">
-              delete
-            </v-icon>
-          </v-list-item-action>
-         </v-list-item>
         <v-btn color="primary" @click="comment()">Add a comment</v-btn>
         <v-flex xs8 id="input">
           <v-text-field label="Add a comment" textarea id="textInput">
@@ -105,17 +95,11 @@ p {
       events () {
         return this.$store.getters.events
       },
-      admin () {
-        return this.$store.getters.admin
-      },
       userdetails () {
         return this.$store.getters.userdetails
       },
       keysEvents () {
         return this.$store.getters.keysEvents
-      },
-      keysUsers () {
-        return this.$store.getters.keysUsers
       },
       eventComments () {
         return firebase.database().ref('/events/' + this.keysEvents[this.id])
@@ -179,9 +163,6 @@ p {
       cancelComment () {
         document.getElementById('input').style.display = 'none'
         this.commentAdd = false
-      },
-      deleteComment (index) {
-        this.$store.dispatch('deleteComment', {index: index, idevent: this.id})
       },
       postComment () {
         this.commentAdd = false

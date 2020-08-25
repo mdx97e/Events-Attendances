@@ -9,7 +9,7 @@
       enable-resize-watcher
       fixed
       temporary>
-      <div id="text" v-if="admin === false">
+      <div id="text">
         <h1>Welcome</h1>
         <v-flex xs12>
           <v-progress-circular
@@ -40,14 +40,6 @@
             <v-icon>account_circle</v-icon>
           </v-list-item-action>
           <v-list-item-title>Account info</v-list-item-title>
-        </v-list-item>
-      </v-flex>
-      <v-flex xs12>
-        <v-list-item router to="/createMeetup" v-if="admin === true">
-          <v-list-item-action>
-            <v-icon>card_travel</v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Create meetup</v-list-item-title>
         </v-list-item>
       </v-flex>
       <v-flex xs12>
@@ -213,7 +205,7 @@ export default {
   created: function () {
     this.$store.dispatch("readEvents");
     this.$store.dispatch("AuthChange");
-    this.$store.dispatch("getUserData");
+    this.$store.dispatch("getUserDetails");
   },
   computed: {
     events() {
@@ -236,19 +228,16 @@ export default {
     },
     userIsAuthenticated() {
       return (
-        this.$store.getters.user !== null &&
-        this.$store.getters.user !== undefined
+        this.$store.getters.userUID !== null &&
+        this.$store.getters.userUID !== undefined
       );
-    },
-    location() {
-      return this.$store.getters.location;
     },
     loginSignupDialog() {
       return this.$store.getters.loginSignupDialog;
     },
     // login part
     user() {
-      return this.$store.getters.user;
+      return this.$store.getters.userUID;
     },
     error() {
       return this.$store.getters.error;
@@ -259,9 +248,6 @@ export default {
         ? "Passwords do not match"
         : "";
     },
-  },
-  mounted: function () {
-    this.$store.dispatch("getLocation");
   },
   methods: {
     onSignOut() {

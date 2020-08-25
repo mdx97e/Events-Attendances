@@ -129,14 +129,6 @@ export default {
     },
     userdetails () {
       return this.$store.getters.userdetails
-    },
-    keysUsers () {
-      return this.$store.getters.keysUsers
-    },
-    getuserdetails () {
-      const x = this.keysUsers.indexOf(this.user.uid)
-      const userdet = this.userdetails[x]
-      return userdet
     }
   },
   created () {

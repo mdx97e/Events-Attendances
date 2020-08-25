@@ -7,18 +7,12 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     events: [],
-    location: {
-      lat: null,
-      long: null,
-      accu: null
-    },
     fb: {
       db: firebase.database()
     },
-    user: null,
+    userUID: null,
     keysEvents: [],
-    keysUsers: [],
-    userdetails: [],
+    userdetails: null,
     eventsGoing: [],
     image: null,
     uploadPicture: [],
@@ -30,23 +24,17 @@ export default new Vuex.Store({
     setError(state, payload) {
       state.error = payload
     },
-    setUser(state, payload) {
-      state.user = payload
+    setUserDetails(state, payload) {
+      state.userdetails = payload
+    },
+    setUserUID(state, payload) {
+      state.userUID = payload
     },
     getEvents: (state, payload) => {
       state.events.push(payload)
     },
     getKeys: (state, payload) => {
       state.keysEvents = payload
-    },
-    getKeysUsers: (state, payload) => {
-      state.keysUsers = payload
-    },
-    getLocation: (state, payload) => {
-      state.location = payload
-    },
-    gotUsers: (state, payload) => {
-      state.userdetails.push(payload)
     },
     eventsGoing: (state, payload) => {
       state.eventsGoing = payload
@@ -87,54 +75,17 @@ export default new Vuex.Store({
           console.log('Error: ' + error.message)
         })
     },
-    deleteEvent({ state }, payload) {
-      console.og(state);
-      firebase.database().ref('/events/' + this.state.keysEvents[payload]).remove()
-    },
-    deleteComment({ state }, payload) {
-      console.og(state);
-      var comments = []
-      firebase.database().ref('/events/' + this.state.keysEvents[payload.idevent] + '/comments/')
-        .on('value', snap => {
-          try {
-            comments = Object.keys(snap.val())
-          } catch (e) {
-            //
-          }
-        }, function (error) {
-          console.log('Error: ' + error.message)
-        })
-      firebase.database().ref('/events/' + this.state.keysEvents[payload.idevent] + '/comments/' + comments[payload.index]).remove()
-    },
-    getUserData({ commit }) {
-      return firebase.database().ref('users')
-        .on('value', snap => {
-          const myObj = snap.val()
-          const keysUsers = Object.keys(snap.val())
-          keysUsers.forEach(key => {
-            const userdetails = {}
-            userdetails.nume = myObj[key].nume
-            userdetails.prenume = myObj[key].prenume
-            userdetails.image = myObj[key].image
-            commit('gotUsers', userdetails)
-          })
-          commit('getKeysUsers', keysUsers)
-        }, function (error) {
-          console.log('Error: ' + error.message)
-        })
-    },
     signUp({ commit }, payload) {
       firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
         .then(
           user => {
-            const newUser = {
-              id: user.uid
-            }
-            commit('setUser', newUser)
+            commit('setUserUID', user.user.uid)
             commit('setLoginSignupDialog', false)
-            firebase.database().ref('/users/' + newUser.id).set({
+            this.dispatch('getUserDetails');
+            firebase.database().ref('/users/' + user.user.uid).set({
               nume: payload.nume,
               prenume: payload.prenume,
+              email: payload.email,
               image: '',
               participari: ''
             })
@@ -150,11 +101,9 @@ export default new Vuex.Store({
       firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
         .then(
           user => {
-            const newUser = {
-              id: user.uid
-            }
-            commit('setUser', newUser)
+            commit('setUserUID', user.user.uid)
             commit('setLoginSignupDialog', false)
+            this.dispatch('getUserDetails');
           })
         .catch(
           error => {
@@ -162,50 +111,41 @@ export default new Vuex.Store({
           }
         )
     },
+    getUserDetails({ commit }) {
+      if (this.state && this.state.userUID) {
+        firebase.database().ref('/users/' + this.state.userUID).on('value', snap => {
+          commit('setUserDetails', snap.val());
+        })
+      } else {
+        commit('setUserDetails', null);
+      }
+    },
     AuthChange({ commit }) {
       firebase.auth().onAuthStateChanged((user) => {
         if (user) {
-          commit('setUser', user)
+          commit('setUserUID', user.uid);
+          this.dispatch('getUserDetails');
         } else {
-          commit('setUser', null)
+          commit('setUserUID', null)
         }
       })
     },
     signOut({ commit }) {
       firebase.auth().signOut().then(function () {
-        commit('setUser', null)
+        commit('setUserUID', null)
+        this.dispatch('getUserDetails');
       }).catch(
         error => {
           console.log(error)
         })
-    },
-    getLocation({ commit }) {
-      return navigator.geolocation.getCurrentPosition(pos => {
-        commit('getLocation', {
-          lat: pos.coords.latitude,
-          long: pos.coords.longitude,
-          acc: pos.coords.accuracy
-        })
-      },
-        error => {
-          window.alert(error.message)
-        }, {
-        enableHighAccuracy: true,
-        maximumAge: 0
-      })
-    },
-    changeDetails(payload) {
-      const cale = firebase.database().ref('users/' + this.state.user.uid)
-      console.log(cale)
-      console.log(payload.nume, payload.prenume)
-      cale.update({ nume: payload.nume, prenume: payload.prenume })
     },
     getEventsGoing({ commit }) {
       return firebase.database().ref('/users/' + this.state.user.uid + '/participari')
         .on('value', snap => {
           commit('emptyGoing')
           const participari = Object.keys(snap.val())
-          commit('eventsGoing', participari)
+          commit('eventsGoing', participari) 
+          // TODO
         })
     },
     Going({ commit }, payload) {
@@ -230,10 +170,8 @@ export default new Vuex.Store({
   },
   getters: {
     events: state => state.events,
-    user: state => state.user,
-    location: state => state.location,
+    userUID: state => state.userUID,
     userdetails: state => state.userdetails,
-    keysUsers: state => state.keysUsers,
     keysEvents: state => state.keysEvents,
     eventsGoing: state => state.eventsGoing,
     uploadPicture: state => state.uploadPicture,
