@@ -10,8 +10,9 @@
         <div>{{ item.descriere | truncate }}</div>
       </div>
       <div class="actions">
-        <div class="low-opacity-text attending-text" v-if="userParticipate()">Attending <i class="el-icon-check"></i></div>
-        <div @click="attend()" class="low-opacity-text not-attending-text" v-if="!userParticipate()">Click to attend</div>
+        <div class="low-opacity-text attending-text" v-if="userLoggedIn && userIsParticipating">Attending <i class="el-icon-check"></i></div>
+        <div @click="attend()" class="low-opacity-text not-attending-text" v-if="userLoggedIn && !userIsParticipating">Click to attend</div>
+        <div v-if="!userLoggedIn"></div>
         <el-button type="secondary" @click="goToDetailsPage()">See details</el-button>
       </div>
     </div>
@@ -23,22 +24,9 @@ import * as moment from 'moment'
 export default {
   name: "CustomCard",
   props: {
-    item: null
-  },
-  computed: {
-    userParticipations() {
-      if (this.user && this.user.attendings) {
-        return Object.keys(this.user.attendings);
-      } else {
-        return [];
-      }
-    },
-    user() {
-      return this.$store.getters.userdetails;
-    },
-    userUID() {
-      return this.$store.getters.userUID;
-    }
+    item: null,
+    userLoggedIn: null,
+    userIsParticipating: null
   },
   filters: {
     formatDate (date) {
@@ -55,14 +43,8 @@ export default {
     goToDetailsPage() {
        this.$router.push("/eventDetails/" + this.item.id);
     },
-    userParticipate() {
-      return this.userParticipations.includes(this.item.id);
-    },
     attend() {
-      this.$store.dispatch('addAttendingToMeeting', {
-        userId: this.userUID,
-        meetingId: this.item.id
-      })
+      this.$store.dispatch('addAttendingToMeeting', this.item.id);
     }
   }
 };
