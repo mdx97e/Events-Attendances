@@ -87,7 +87,7 @@ export default new Vuex.Store({
               prenume: payload.prenume,
               email: payload.email,
               image: '',
-              participari: ''
+              attendings: ''
             })
           }
         )
@@ -110,6 +110,11 @@ export default new Vuex.Store({
             commit('setError', error)
           }
         )
+    },
+    addAttendingToMeeting({ commit }, payload) {
+      console.log(commit)
+      firebase.database().ref('/users/' + payload.userId + '/attendings/' + payload.meetingId).set(true);
+      firebase.database().ref('/events/' + payload.meetingId + '/participants/' + payload.userId).set(true);
     },
     getUserDetails({ commit }) {
       if (this.state && this.state.userUID) {
@@ -139,33 +144,8 @@ export default new Vuex.Store({
           console.log(error)
         })
     },
-    getEventsGoing({ commit }) {
-      return firebase.database().ref('/users/' + this.state.user.uid + '/participari')
-        .on('value', snap => {
-          commit('emptyGoing')
-          const participari = Object.keys(snap.val())
-          commit('eventsGoing', participari) 
-          // TODO
-        })
-    },
-    Going({ commit }, payload) {
-      console.log(commit);
-      const user = this.state.user.uid
-      return firebase.database().ref('/users/' + user + '/participari/' + this.state.keysEvents[payload])
-        .set({
-          text: true
-        })
-    },
-    setPrezenti({ state }, payload) {
-      console.log(state)
-      return firebase.database().ref('/events/' + this.state.keysEvents[payload])
-        .update({
-          prezenti: +this.state.events[payload].prezenti + 1
-        })
-    },
     loginSignupDialog({ commit }, payload) {
         commit('setLoginSignupDialog', payload)
-    
     },
   },
   getters: {

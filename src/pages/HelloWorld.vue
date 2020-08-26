@@ -95,11 +95,6 @@ export default {
       return this.events.filter(item => this.titleAndDescriptionFilter(item) && this.dateFilter(item.data));
     },
   },
-  created: function() {
-    if (this.user && this.user.uid) {
-      this.$store.dispatch("getEventsGoing");
-    }
-  },
   methods: {
     titleAndDescriptionFilter(item) {
       let textToSearch = this.textFilter.toLowerCase();

@@ -23,7 +23,7 @@
           </v-progress-circular>
         </v-flex>
         <v-flex xs12>
-          {{ totalParticipari }} events out of {{ totalEvents }}
+          {{ totalAttendings }} events out of {{ totalEvents }}
         </v-flex>
       </div>
       <v-flex xs12>
@@ -214,11 +214,11 @@ export default {
     totalEvents() {
       return this.$store.getters.events.length;
     },
-    totalParticipari() {
+    totalAttendings() {
       return this.$store.getters.eventsGoing.length;
     },
     value() {
-      return Math.floor((this.totalParticipari * 100) / this.totalEvents);
+      return Math.floor((this.totalAttendings * 100) / this.totalEvents);
     },
     color() {
       if (this.value < 30) return "red";

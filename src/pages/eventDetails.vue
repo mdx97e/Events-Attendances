@@ -145,21 +145,21 @@ p {
         document.getElementById('input').style.display = 'inline'
         this.commentAdd = true
       },
-      chart1 () {
-        window.google.charts.load('current', {packages: ['corechart']})
-        window.google.charts.setOnLoadCallback(() => {
-          var data = window.google.visualization.arrayToDataTable([
-            ['Meeting', 'Percent'],
-            ['Going', this.events[this.id].prezenti],
-            ['Not going', this.userdetails.length - this.events[this.id].prezenti]
-          ])
-          var options = {
-            is3D: true
-          }
-          var chart = new window.google.visualization.PieChart(document.getElementById('piechart_3d'))
-          chart.draw(data, options)
-        })
-      },
+      // chart1 () {
+      //   window.google.charts.load('current', {packages: ['corechart']})
+      //   window.google.charts.setOnLoadCallback(() => {
+      //     var data = window.google.visualization.arrayToDataTable([
+      //       ['Meeting', 'Percent'],
+      //       ['Going', this.events[this.id].prezenti],
+      //       ['Not going', this.userdetails.length - this.events[this.id].prezenti]
+      //     ])
+      //     var options = {
+      //       is3D: true
+      //     }
+      //     var chart = new window.google.visualization.PieChart(document.getElementById('piechart_3d'))
+      //     chart.draw(data, options)
+      //   })
+      // },
       cancelComment () {
         document.getElementById('input').style.display = 'none'
         this.commentAdd = false
@@ -179,8 +179,8 @@ p {
             const myObj = snap.val()
             const keys = Object.keys(snap.val())
             keys.forEach(key => {
-              let participari = Object.keys(myObj[key].participari)
-              if (participari.includes(keyEvent)) {
+              let attendings = Object.keys(myObj[key].attendings)
+              if (attendings.includes(keyEvent)) {
                 this.usersGoing.push(myObj[key].nume + ' ' + myObj[key].prenume)
               }
             })
