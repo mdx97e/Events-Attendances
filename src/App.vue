@@ -1,70 +1,7 @@
 <template>
   <v-app>
-    <!-- <v-navigation-drawer
-      v-show="userIsAuthenticated"
-      persistent
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      v-model="drawer"
-      enable-resize-watcher
-      fixed
-      temporary>
-      <div id="text">
-        <h1>Welcome</h1>
-        <v-flex xs12>
-          <v-progress-circular
-            :size="110"
-            :width="15"
-            :rotate="360"
-            :value="value"
-            :color="color"
-          >
-            {{ value }} %
-          </v-progress-circular>
-        </v-flex>
-        <v-flex xs12>
-          {{ totalAttendings }} events out of {{ totalEvents }}
-        </v-flex>
-      </div>
-      <v-flex xs12>
-        <v-list-item router to="/">
-          <v-list-item-action>
-            <v-icon>home</v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Home</v-list-item-title>
-        </v-list-item>
-      </v-flex>
-      <v-flex xs12>
-        <v-list-item router to="/profile">
-          <v-list-item-action>
-            <v-icon>account_circle</v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Account info</v-list-item-title>
-        </v-list-item>
-      </v-flex>
-      <v-flex xs12>
-        <v-list-item @click="onSignOut">
-          <v-list-item-action>
-            <v-icon>clear</v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Sign Out</v-list-item-title>
-        </v-list-item>
-      </v-flex>
-      <v-list>
-        <v-list-item value="true" v-for="(item, i) in items" :key="i">
-          <v-list-item-action>
-            <v-icon v-html="item.icon"></v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title"></v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>-->
     <el-menu class="el-menu-demo" mode="horizontal">
-      <el-menu-item @click="goToHp">Meeting App</el-menu-item>
       <el-menu-item @click="openLoginSignupDialog" v-if="!userIsAuthenticated">Login / SignUp</el-menu-item>
-      <!-- <el-menu-item @click="onSignOut" v-if="userIsAuthenticated">Logout</el-menu-item> -->
       <el-menu-item v-if="userIsAuthenticated">
         <el-dropdown @command="handleAvatarDropdown">
           <el-avatar size="medium" :src="circleUrl"></el-avatar>
@@ -91,22 +28,22 @@
           v-if="error !== null"
         >Incorrect email or password. Please try again.</v-alert>
         <a @click="forgotPassword" class="forgot-password">Forgot password?</a>
-        <el-button type="primary" @click="userSignin">Sign in</el-button>
+        <el-button plain type="primary" @click="userSignin">Sign in</el-button>
       </v-form>
       <div class="no-content" v-if="signInActivated">
         <div class="dialog-description-form">You don't have an account?</div>
-        <el-button @click="signInActivated = false">Sign up</el-button>
+        <el-button plain @click="signInActivated = false">Sign up</el-button>
       </div>
       <div class="no-content" v-if="!signInActivated">
         <div class="dialog-description-form">Do you have an account?</div>
-        <el-button @click="signInActivated = true">Sign in</el-button>
+        <el-button plain @click="signInActivated = true">Sign in</el-button>
       </div>
       <v-form v-if="!signInActivated" class="custom-form">
         <el-input placeholder="Name" v-model="numeSignUp"></el-input>
         <el-input placeholder="Surname" v-model="prenumeSignUp"></el-input>
         <el-input placeholder="Email" v-model="emailSignUp"></el-input>
         <el-input placeholder="Password" v-model="passwordSignUp" show-password></el-input>
-        <el-button type="primary" @click="userSignUp">Sign Up</el-button>
+        <el-button plain type="primary" @click="userSignUp">Sign Up</el-button>
       </v-form>
     </el-dialog>
   </v-app>
@@ -155,9 +92,6 @@ form {
 }
 .forgot-password {
   padding: 10px 0px;
-}
-.el-button {
-  width: 50%;
 }
 .no-content {
   display: flex;
@@ -287,9 +221,6 @@ export default {
     },
     openLoginSignupDialog() {
       this.$store.dispatch("loginSignupDialog", true);
-    },
-    goToHp() {
-      router.push("/");
     },
     handleAvatarDropdown(command) {
       switch (command) {

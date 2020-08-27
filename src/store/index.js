@@ -153,13 +153,15 @@ export default new Vuex.Store({
     getEventDetails({commit}, payload) {
       firebase.database().ref('/events/' + payload).on('value', snap => {
         let eventDetails = snap.val();
-        let usersDetails = [];
-        Object.keys(eventDetails.participants).forEach(userID => {
-          firebase.database().ref('/users/' + userID).on('value', snap => {
-            usersDetails.push(snap.val());
+        if (eventDetails.participants) {
+          let usersDetails = [];
+          Object.keys(eventDetails.participants).forEach(userID => {
+            firebase.database().ref('/users/' + userID).on('value', snap => {
+              usersDetails.push(snap.val());
+            })
           })
-        })
-        eventDetails.participatingUsers = usersDetails;
+          eventDetails.participatingUsers = usersDetails;
+        }
         commit('setEventDetails', eventDetails);
       })
     }
