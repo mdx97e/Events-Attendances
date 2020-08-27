@@ -25,7 +25,7 @@
       </div>
     </div>
 
-    <div class="description">{{ eventDetails.descriere }}</div>
+    <div class="description" v-html="eventDetails.descriere"></div>
 
     <div class="users">
       <div

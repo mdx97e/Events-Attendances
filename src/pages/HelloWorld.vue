@@ -40,7 +40,7 @@
   display: flex;
   flex-flow: wrap;
   justify-content: center;
-  margin: 0px 10%;
+  margin: 0px 5%;
 }
 .hello-world-wrapper {
   display: flex;

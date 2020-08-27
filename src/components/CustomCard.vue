@@ -7,7 +7,7 @@
     <div class="details">
       <div class="date-description">
         <div class="low-opacity-text date">{{ item.data | formatDate }}</div>
-        <div>{{ item.descriere | truncate }}</div>
+        <div  v-html="getTruncatedText(item.descriere)"></div>
       </div>
       <div class="actions">
         <div
@@ -44,15 +44,15 @@ export default {
   filters: {
     formatDate(date) {
       return moment(date).fromNow();
-    },
-    truncate(text) {
+    }
+  },
+  methods: {
+    getTruncatedText(text) {
       if (text.length > 100) {
         return text.substring(0, 100) + "...";
       }
       return text;
     },
-  },
-  methods: {
     goToDetailsPage() {
       this.$router.push("/eventDetails/" + this.item.id);
     },
