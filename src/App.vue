@@ -64,7 +64,6 @@
     <el-menu class="el-menu-demo" mode="horizontal">
       <el-menu-item @click="goToHp">Meeting App</el-menu-item>
       <el-menu-item @click="openLoginSignupDialog" v-if="!userIsAuthenticated">Login / SignUp</el-menu-item>
-      <!-- <el-menu-item @click="onSignOut" v-if="userIsAuthenticated">Logout</el-menu-item> -->
       <el-menu-item v-if="userIsAuthenticated">
         <el-dropdown @command="handleAvatarDropdown">
           <el-avatar size="medium" :src="circleUrl"></el-avatar>
@@ -109,6 +108,27 @@
         <el-button type="primary" @click="userSignUp">Sign Up</el-button>
       </v-form>
     </el-dialog>
+
+    <el-dialog title="Profile" :visible.sync="profileDialog">
+      <v-form class="custom-profile-form" v-if='userDetails'>
+        <el-upload
+          class="avatar-uploader"
+          action=""
+          :auto-upload="false"
+          :show-file-list="false"
+          :on-success="handleAvatarSuccess"
+          :before-upload="beforeAvatarUpload"
+        >
+          <img v-if="userDetails.image !== ''" :src="userDetails.image" class="avatar" />
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
+        <el-input placeholder="Email" v-model="userDetails.email" class='email-input'></el-input>
+        <el-input placeholder="Name" v-model="userDetails.nume" @change="changeName"></el-input>
+        <el-input placeholder="Surname" v-model="userDetails.prenume"></el-input>
+        <el-button type="primary" v-if="editProfile === false" @click="editProfile = true">Edit</el-button>
+        <el-button type="primary" v-if="editProfile === true" @click="updateProfile">Save</el-button>
+      </v-form>
+    </el-dialog>
   </v-app>
 </template>
 
@@ -147,12 +167,25 @@ form {
   align-items: center;
   justify-content: center;
 }
+
+.custom-profile-form {
+  background-color: white;
+  padding: 34px;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .low-opacity-text {
   opacity: 0.5;
 }
 .el-input {
   padding: 5px;
 }
+
 .forgot-password {
   padding: 10px 0px;
 }
@@ -167,6 +200,32 @@ form {
   justify-content: center;
   padding: 34px;
   width: 50%;
+}
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
+.email-input {
+  background-color: white;
 }
 </style>
 
@@ -198,8 +257,11 @@ export default {
       emailSignUp: "",
       numeSignUp: null,
       prenumeSignUp: null,
+      editProfile: false,
       circleUrl:
         "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+      profileDialog: false,
+   
     };
   },
   created: function () {
@@ -208,6 +270,7 @@ export default {
     this.$store.dispatch("getUserDetails");
   },
   computed: {
+  
     events() {
       return this.$store.getters.events;
     },
@@ -235,14 +298,15 @@ export default {
     loginSignupDialog() {
       return this.$store.getters.loginSignupDialog;
     },
-    // login part
+    userDetails() {
+      return this.$store.getters.userDetails;
+    },
     user() {
       return this.$store.getters.userUID;
     },
     error() {
       return this.$store.getters.error;
     },
-    // signup part
     comparePasswords() {
       return this.password !== this.confirmPassword
         ? "Passwords do not match"
@@ -253,7 +317,6 @@ export default {
     onSignOut() {
       this.$store.dispatch("signOut");
     },
-    // login part
     userSignin() {
       this.$store.dispatch("signIn", {
         email: this.emailLogin,
@@ -276,7 +339,6 @@ export default {
           window.alert(error.message);
         });
     },
-    // signup part
     userSignUp() {
       this.$store.dispatch("signUp", {
         email: this.emailSignUp,
@@ -291,15 +353,44 @@ export default {
     goToHp() {
       router.push("/");
     },
+    changeName() {
+      console.log(this.details)
+    },
+    updateProfile() {
+      this.$store.dispatch("updateProfile", {
+        nume: this.userDetails.nume,
+        prenume: this.userDetails.prenume,
+      });
+    },
     handleAvatarDropdown(command) {
       switch (command) {
         case "goToProfilePage":
-          router.push("/profile");
+          this.profileDialog = true;
           break;
         case "signOut":
           this.onSignOut();
           break;
       }
+    },
+
+    handleAvatarSuccess(res, file) {
+      console.log(res, file)
+      let currentUserImage = URL.createObjectURL(file.raw);
+      this.$store.dispatch("updateProfilePicture", {
+        image: currentUserImage
+      });
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error("Avatar picture must be JPG format!");
+      }
+      if (!isLt2M) {
+        this.$message.error("Avatar picture size can not exceed 2MB!");
+      }
+      return isJPG && isLt2M;
     },
   },
 };

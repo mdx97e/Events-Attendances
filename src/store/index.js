@@ -12,12 +12,13 @@ export default new Vuex.Store({
     },
     userUID: null,
     keysEvents: [],
-    userdetails: null,
+    userDetails: null,
     eventsGoing: [],
     image: null,
     uploadPicture: [],
     error: null,
     loginSignupDialog: false,
+    updateProfilePicture: ''
 
   },
   mutations: {
@@ -25,7 +26,7 @@ export default new Vuex.Store({
       state.error = payload
     },
     setUserDetails(state, payload) {
-      state.userdetails = payload
+      state.userDetails = payload
     },
     setUserUID(state, payload) {
       state.userUID = payload
@@ -41,6 +42,9 @@ export default new Vuex.Store({
     },
     uploadPicture(state, payload) {
       state.uploadPicture.push(payload)
+    },
+    updateProfilePicture(state, payload) {
+      state.updateProfilePicture.push(payload)
     },
     emptyEvents: (state) => {
       state.events = []
@@ -145,13 +149,22 @@ export default new Vuex.Store({
         })
     },
     loginSignupDialog({ commit }, payload) {
-        commit('setLoginSignupDialog', payload)
+      commit('setLoginSignupDialog', payload)
     },
+    updateProfile({commit}, payload) {
+      console.log(commit)
+      firebase.database().ref('users/' + this.state.userUID).update({ nume: payload.nume, prenume: payload.prenume })
+    },
+    updateProfilePicture({commit}, payload) {
+      console.log(commit)
+      console.log(payload)
+      firebase.database().ref('users/' + this.state.userUID).update({ image: payload})
+    }
   },
   getters: {
     events: state => state.events,
     userUID: state => state.userUID,
-    userdetails: state => state.userdetails,
+    userDetails: state => state.userDetails,
     keysEvents: state => state.keysEvents,
     eventsGoing: state => state.eventsGoing,
     uploadPicture: state => state.uploadPicture,
