@@ -18,8 +18,8 @@ export default new Vuex.Store({
     uploadPicture: [],
     error: null,
     loginSignupDialog: false,
-    updateProfilePicture: ''
-
+    updateProfilePicture: '',
+    currentEventDetails: ''
   },
   mutations: {
     setError(state, payload) {
@@ -55,6 +55,9 @@ export default new Vuex.Store({
     setLoginSignupDialog: (state, payload) => {
       state.loginSignupDialog = payload
     },
+    setEventDetails: (state, payload) => {
+      state.currentEventDetails = payload;
+    }
   },
   actions: {
     readEvents({ commit }) {
@@ -117,8 +120,8 @@ export default new Vuex.Store({
     },
     addAttendingToMeeting({ commit }, payload) {
       console.log(commit)
-      firebase.database().ref('/users/' + payload.userId + '/attendings/' + payload.meetingId).set(true);
-      firebase.database().ref('/events/' + payload.meetingId + '/participants/' + payload.userId).set(true);
+      firebase.database().ref('/users/' + this.state.userUID + '/attendings/' + payload).set(true);
+      firebase.database().ref('/events/' + payload + '/participants/' + this.state.userUID).set(true);
     },
     getUserDetails({ commit }) {
       if (this.state && this.state.userUID) {
@@ -155,10 +158,27 @@ export default new Vuex.Store({
       console.log(commit)
       firebase.database().ref('users/' + this.state.userUID).update({ nume: payload.nume, prenume: payload.prenume })
     },
+
     updateProfilePicture({commit}, payload) {
       console.log(commit)
       console.log(payload)
       firebase.database().ref('users/' + this.state.userUID).update({ image: payload})
+    },
+    getEventDetails({commit}, payload) {
+      firebase.database().ref('/events/' + payload).on('value', snap => {
+        let eventDetails = snap.val();
+        if (eventDetails.participants) {
+          let usersDetails = [];
+          Object.keys(eventDetails.participants).forEach(userID => {
+            firebase.database().ref('/users/' + userID).on('value', snap => {
+              usersDetails.push(snap.val());
+            })
+          })
+          eventDetails.participatingUsers = usersDetails;
+        }
+        commit('setEventDetails', eventDetails);
+      })
+
     }
   },
   getters: {
@@ -169,6 +189,7 @@ export default new Vuex.Store({
     eventsGoing: state => state.eventsGoing,
     uploadPicture: state => state.uploadPicture,
     error: state => state.error,
-    loginSignupDialog: state => state.loginSignupDialog
+    loginSignupDialog: state => state.loginSignupDialog,
+    currentEventDetails: state => state.currentEventDetails
   }
 })

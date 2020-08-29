@@ -4,7 +4,6 @@ import HelloWorld from '@/pages/HelloWorld'
 import eventDetails from '@/pages/eventDetails'
 import SignUp from '@/pages/SignUp'
 import Profile from '@/pages/Profile'
-import createMeetup from '@/pages/createMeetup'
 import AuthGuard from './authGuard'
 
 Vue.use(Router)
@@ -26,11 +25,6 @@ export default new Router({
       name: 'profile',
       component: Profile,
       beforeEnter: AuthGuard
-    },
-    {
-      path: '/createmeetup',
-      name: 'createmeetup',
-      component: createMeetup
     },
     {
       path: '/',
